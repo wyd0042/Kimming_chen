@@ -96,6 +96,7 @@ const EXPERIENCES = [
 const DEALS = [
   {
     id: 1,                                          // 唯一编号，不要重复
+    date: "2026.06",                                // 用于排序，最新在前
     name: "某新型存储介质芯片公司",                    // 项目名（脱敏）
     round: "天使++轮 · 300 万美元",                   // 轮次与金额
     status: "已投资",                                 // 状态标签
@@ -110,6 +111,7 @@ const DEALS = [
   },
   {
     id: 2,
+    date: "2025.11",
     name: "上海垣信卫星",
     round: "A+ 轮 · 2000 万人民币",
     status: "已投资",
@@ -124,6 +126,7 @@ const DEALS = [
   },
   {
     id: 3,
+    date: "2026.04",
     name: "某存算解耦架构推理芯片公司",
     round: "深度评估阶段",
     status: "深度评估",
@@ -138,6 +141,7 @@ const DEALS = [
   },
   {
     id: 4,
+    date: "2026.05",
     name: "某核聚变初创项目",
     round: "早期接触",
     status: "已输出备忘录",
@@ -387,11 +391,39 @@ function StatusBadge({ status }) {
   return <span className={"badge " + (cls[status] || "")}>{status}</span>;
 }
 
+function sortByDateDesc(items) {
+  return [...items].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+}
+
+function DetailModal({ detail, onClose }) {
+  if (!detail) return null;
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <article className="modal-panel" role="dialog" aria-modal="true" aria-labelledby="detail-title" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" type="button" onClick={onClose} aria-label="关闭详情">×</button>
+        <div className="modal-kicker">{detail.kicker}</div>
+        <h2 className="modal-title" id="detail-title">{detail.title}</h2>
+        <div className="modal-meta">
+          {detail.date && <span>{detail.date}</span>}
+          {detail.meta?.map((m) => <span key={m}>{m}</span>)}
+        </div>
+        <div className="modal-content">
+          <p>待补充</p>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 export default function JimmyChenSite() {
   const [active, setActive] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [openDeal, setOpenDeal] = useState(1);
+  const [detail, setDetail] = useState(null);
+  const sortedDeals = sortByDateDesc(DEALS);
+  const sortedThoughts = sortByDateDesc(THOUGHTS);
+  const sortedReflections = sortByDateDesc(REFLECTIONS);
 
   useEffect(() => {
     const onScroll = () => {
@@ -415,7 +447,37 @@ export default function JimmyChenSite() {
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!detail) return undefined;
+    const onKeyDown = (e) => { if (e.key === "Escape") setDetail(null); };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [detail]);
+
   const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
+  const openDealDetail = (deal) => setDetail({
+    kicker: "参与投资的项目",
+    title: deal.name,
+    date: deal.date,
+    meta: [deal.round, deal.status, deal.fund].filter(Boolean),
+  });
+  const openThoughtDetail = (thought) => setDetail({
+    kicker: "一级市场思考",
+    title: thought.title,
+    date: thought.date,
+    meta: [thought.category, thought.readTime].filter(Boolean),
+  });
+  const openReflectionDetail = (reflection) => setDetail({
+    kicker: "成长感悟",
+    title: reflection.title,
+    date: reflection.date,
+    meta: [],
+  });
 
   return (
     <div className="site">
@@ -480,27 +542,20 @@ export default function JimmyChenSite() {
         {/* Deals */}
         <section className="section">
           <SectionHead no="02" zh="参与投资的项目" en="DEAL EXPERIENCE" id="deals" />
-          <p className="sec-sub rv">参与研判与推动的真实项目（已脱敏）。点击展开查看投资论点与具体工作。</p>
+          <p className="sec-sub rv">参与研判与推动的真实项目（已脱敏）。点击查看项目详情。</p>
           <div className="deals">
-            {DEALS.map((d) => (
-              <article className={"deal rv " + (openDeal === d.id ? "deal-open" : "")} key={d.id}>
-                <button className="deal-head" onClick={() => setOpenDeal(openDeal === d.id ? null : d.id)}>
+            {sortedDeals.map((d) => (
+              <article className="deal rv" key={d.id}>
+                <button className="deal-head" type="button" onClick={() => openDealDetail(d)}>
                   <div className="deal-title-block">
                     <div className="deal-title-row">
                       <h3 className="deal-name">{d.name}</h3>
                       <StatusBadge status={d.status} />
                     </div>
-                    <p className="deal-meta">{d.round} · {d.fund}</p>
+                    <p className="deal-meta">{d.date} · {d.round} · {d.fund}</p>
                   </div>
-                  <span className="deal-arrow">›</span>
+                  <span className="deal-arrow">查看详情 ›</span>
                 </button>
-                {openDeal === d.id && (
-                  <div className="deal-body">
-                    <p className="deal-role"><span className="deal-label">我的角色</span>{d.myRole}</p>
-                    <p className="deal-thesis"><span className="deal-label">投资论点</span>{d.thesis}</p>
-                    <ul className="deal-details">{d.details.map((x, i) => <li key={i}>{x}</li>)}</ul>
-                  </div>
-                )}
               </article>
             ))}
           </div>
@@ -511,15 +566,15 @@ export default function JimmyChenSite() {
           <SectionHead no="03" zh="一级市场思考" en="RESEARCH NOTES" id="thoughts" />
           <p className="sec-sub rv">对产业趋势与投资逻辑的持续研究，观点独立，持续更新。</p>
           <div className="thoughts">
-            {THOUGHTS.map((t) => (
-              <article className={"thought rv " + (t.highlight ? "thought-hl" : "")} key={t.id}>
+            {sortedThoughts.map((t) => (
+              <article className={"thought rv " + (t.highlight ? "thought-hl" : "")} key={t.id} onClick={() => openThoughtDetail(t)}>
                 <div className="thought-meta">
                   <span className="thought-cat">{t.category}</span>
                   <span className="thought-date">{t.date} · {t.readTime}</span>
                 </div>
                 <h3 className="thought-title">{t.title}</h3>
                 <p className="thought-summary">{t.summary}</p>
-                <span className="thought-more">阅读全文 →</span>
+                <button className="thought-more" type="button" onClick={(e) => { e.stopPropagation(); openThoughtDetail(t); }}>阅读全文 →</button>
               </article>
             ))}
           </div>
@@ -529,13 +584,14 @@ export default function JimmyChenSite() {
         <section className="section">
           <SectionHead no="04" zh="成长感悟" en="REFLECTIONS" id="reflections" />
           <div className="reflections">
-            {REFLECTIONS.map((r) => (
-              <article className="reflection rv" key={r.id}>
+            {sortedReflections.map((r) => (
+              <article className="reflection rv" key={r.id} onClick={() => openReflectionDetail(r)}>
                 <div className="ref-head">
                   <h3 className="ref-title">{r.title}</h3>
                   <span className="ref-date">{r.date}</span>
                 </div>
                 <p className="ref-content">{r.content}</p>
+                <button className="ref-more" type="button" onClick={(e) => { e.stopPropagation(); openReflectionDetail(r); }}>查看详情 →</button>
               </article>
             ))}
           </div>
@@ -585,6 +641,7 @@ export default function JimmyChenSite() {
           <span className="footer-dim">Built with rigor · Last updated 2026.07</span>
         </footer>
       </main>
+      <DetailModal detail={detail} onClose={() => setDetail(null)} />
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -650,14 +707,13 @@ export default function JimmyChenSite() {
         .tag{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--wash);padding:3px 9px;border-radius:2px;letter-spacing:.03em}
 
         .deals{display:grid;gap:14px}
-        .deal{border:1px solid var(--line);border-radius:4px;background:#fff;transition:border-color .25s,box-shadow .25s}
-        .deal:hover{border-color:#B9C4D2}.deal-open{border-color:var(--oxford);box-shadow:0 2px 14px rgba(0,33,71,.06)}
+        .deal{border:1px solid var(--line);border-radius:4px;background:#fff;transition:border-color .25s,box-shadow .25s,transform .25s}
+        .deal:hover{border-color:var(--oxford);box-shadow:0 4px 16px rgba(0,33,71,.06);transform:translateY(-2px)}
         .deal-head{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:20px 24px;background:none;border:none;text-align:left}
         .deal-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
         .deal-name{font-family:var(--serif);font-size:16.5px;font-weight:700;color:var(--ink)}
         .deal-meta{font-family:var(--mono);font-size:12px;color:var(--faint)}
-        .deal-arrow{font-size:20px;color:var(--faint);flex-shrink:0;margin-top:2px;transition:transform .25s}
-        .deal-open .deal-arrow{transform:rotate(90deg);color:var(--oxford)}
+        .deal-arrow{font-family:var(--mono);font-size:11.5px;color:var(--oxford);flex-shrink:0;margin-top:2px;letter-spacing:.04em}
         .deal-body{padding:4px 24px 22px;border-top:1px solid var(--wash)}
         .deal-label{display:inline-block;font-family:var(--mono);font-size:10.5px;color:var(--crit);letter-spacing:.1em;margin-right:12px;min-width:62px}
         .deal-role{font-size:13.5px;color:var(--ink);padding:14px 0 8px}
@@ -668,7 +724,7 @@ export default function JimmyChenSite() {
         .badge-invested{background:#E2EEE4;color:#1F5C33}.badge-eval{background:var(--blue-wash);color:var(--oxford)}.badge-memo{background:#F4EEDC;color:#7A5F1E}
 
         .thoughts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-        .thought{border:1px solid var(--line);border-radius:4px;background:#fff;padding:22px 24px;display:flex;flex-direction:column;transition:border-color .25s,transform .25s,box-shadow .25s}
+        .thought{border:1px solid var(--line);border-radius:4px;background:#fff;padding:22px 24px;display:flex;flex-direction:column;transition:border-color .25s,transform .25s,box-shadow .25s;cursor:pointer}
         .thought:hover{border-color:var(--oxford);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,33,71,.07)}
         .thought-hl{border-color:var(--oxford);background:linear-gradient(180deg,#fff 0%,var(--blue-wash) 140%)}
         .thought-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -677,14 +733,26 @@ export default function JimmyChenSite() {
         .thought-date{font-family:var(--mono);font-size:11px;color:var(--faint)}
         .thought-title{font-family:var(--serif);font-size:16.5px;font-weight:700;line-height:1.55;margin-bottom:10px;color:var(--ink)}
         .thought-summary{font-size:13.5px;color:var(--sub);flex:1}
-        .thought-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);margin-top:16px}
+        .thought-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);margin-top:16px;background:none;border:none;text-align:left;padding:0;align-self:flex-start}
 
         .reflections{max-width:720px}
-        .reflection{padding:26px 0;border-bottom:1px solid var(--line)}.reflection:first-of-type{padding-top:4px}.reflection:last-of-type{border-bottom:none}
+        .reflection{padding:26px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding-left .25s,border-color .25s}.reflection:hover{padding-left:10px;border-bottom-color:#B9C4D2}.reflection:first-of-type{padding-top:4px}.reflection:last-of-type{border-bottom:none}
         .ref-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:16px}
         .ref-title{font-family:var(--serif);font-size:17.5px;font-weight:700;color:var(--oxford)}
         .ref-date{font-family:var(--mono);font-size:11px;color:var(--faint);flex-shrink:0}
         .ref-content{font-size:14.5px;color:#3C4654;line-height:2}
+        .ref-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);background:none;border:none;padding:0;margin-top:12px;text-align:left}
+
+        .modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(20,32,46,.44);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:32px}
+        .modal-panel{position:relative;width:min(760px,100%);max-height:min(76vh,720px);overflow:auto;background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:54px 62px 58px}
+        .modal-close{position:absolute;top:20px;right:22px;width:34px;height:34px;border:1px solid #D8D1C0;border-radius:50%;background:#fff;color:#B9A978;font-size:25px;line-height:28px;display:flex;align-items:center;justify-content:center}
+        .modal-close:hover{border-color:var(--oxford);color:var(--oxford)}
+        .modal-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--faint);margin-bottom:12px}
+        .modal-title{font-family:var(--serif);font-size:28px;line-height:1.45;color:var(--oxford);margin-bottom:12px}
+        .modal-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px}
+        .modal-meta span{font-family:var(--mono);font-size:11.5px;color:var(--sub);background:var(--wash);border-radius:2px;padding:3px 9px}
+        .modal-content{border-top:1px solid var(--line);padding-top:30px;min-height:180px}
+        .modal-content p{font-family:var(--serif);font-size:22px;color:var(--faint);letter-spacing:.06em;text-align:center;padding:54px 0}
 
         .edu-grid{display:grid;gap:16px}
         .edu{border:1px solid var(--line);border-radius:4px;background:#fff;padding:24px 26px}
@@ -715,6 +783,8 @@ export default function JimmyChenSite() {
           .section{margin-bottom:80px}
           .tl-item{grid-template-columns:1fr;gap:8px}.tl-left{text-align:left;display:flex;gap:12px;align-items:baseline;padding-left:26px}
           .thoughts{grid-template-columns:1fr}
+          .deal-head{padding:18px 18px}.deal-arrow{margin-top:10px}
+          .modal-backdrop{padding:18px}.modal-panel{max-height:82vh;padding:48px 24px 34px}.modal-title{font-size:22px}.modal-close{top:14px;right:14px}
           .contact-card{padding:40px 24px}.br-desktop{display:none}.sec-en{display:none}
         }
       `}</style>
