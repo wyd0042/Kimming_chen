@@ -158,9 +158,35 @@ const DEALS = [
 ];
 
 
-// ── 一级市场思考（文章列表）────────────────────────────────────────
+// ── 一级市场笔记（文章列表）────────────────────────────────────────
 // highlight: true 的文章会特别高亮显示
 const THOUGHTS = [
+  {
+    id: 5,
+    title: "视频生成的 MoE 时刻：Dense 天花板与架构分水岭",
+    date: "2026/07/10",
+    category: "AI 视频生成",
+    readTime: "8 min",
+    summary: "视频生成赛道正在被一条技术线一分为二。MoE 在语言模型里是标配，但在视频里至今只有极少数公司跑通——路由坍缩与通信爆炸是两个结构性难题。本文从 MoE 在视频中的技术瓶颈出发，拆解创业公司在有限算力下的架构突破路径。",
+    highlight: true,
+    content: [
+      { heading: "MoE 为什么在视频里这么难" },
+      "MoE 在文本模型里已经是标配了，DeepSeek-V3、Kimi K2 都是 MoE。逻辑不复杂：模型内部拆成一堆专家子网络，每次只激活一小部分，参数可以做很大但计算量不高。在 LLM 里这招很好使，因为文字 token 之间差异天然就大——代码和诗歌长得完全不一样，路由器很容易把它们分配给不同的专家。",
+      "但视频的 token 却不是这样。一片蓝天的所有 token 在语义空间里几乎挤在一个点上。路由器面对一大堆长得差不多的数据，分不出谁该去哪个专家，最后所有 token 都涌向同一两个专家，其余的空转——这就是论文里说的「路由坍缩」（routing collapse）。MoE 退化成了 Dense，稀疏激活的效率优势无从兑现。",
+      "今年 5 月有篇 arXiv 论文专门做了系统性诊断，结论很直接：MoE 在视频 DiT 里的应用仍处于非常早期的阶段。这不是调参能解决的，需要在路由机制、模型架构、通信系统三个层面同时突破。",
+      "还有一个更实际的工程瓶颈：视频的 token 量比文字大两三个数量级。一段 5 秒 1080p 视频在模型内部可能编码为上百万个 token，每个都要经过路由、分配到不同专家、跨 GPU 通信。通信效率跟不上的话，GPU 大部分时间在等数据而不是在算——训练直接卡在带宽上。",
+      "到目前为止，真正在视频生成里跑通 MoE 的公司只有字节和 Sand.ai。字节靠的是万卡集群配 NVLink 高速互联，暴力把 GPU 利用率推到 95%。这条路大厂走得通，但创业公司没有这个算力预算。",
+      { heading: "有限算力下的架构突破" },
+      "Sand.ai 的路径回答了一个不同的问题：不靠几万张卡，MoE 视频模型能不能训出来？",
+      "他们做了三件关键的事。",
+      "一是技术路线选了自回归而非 Diffusion。这个选择在 2024 年是非共识，当时全行业都在做 Diffusion。自回归把视频建模成「预测下一帧」，每帧基于前面所有帧生成，天然带因果关系。",
+      "二是架构上采用了单流式设计，配合超细粒度 MoE。这个值得展开讲。大多数多模态模型是「多流式」的——文本、图像、视频各有一个独立的编码器，最后通过 cross-attention 做融合，模态之间的交互发生在很靠后的层。Sand.ai 的做法是把所有模态的 token 拼成一条序列，送进同一个 Transformer，让 self-attention 从第一层就同时看到所有 token。",
+      "关键在 FFN 层的处理：不是拆成常规的 8-16 个大专家，而是拆成 256+ 个极细粒度的小专家，让路由器自动学习分配文本 token 去语言专家，视频 token 去运动专家，不需要人工设计分流规则。这种超细粒度的设计绕开了视觉 token 路由坍缩的问题：不是让几个大专家去分辨「蓝天 vs 草地」这种本来就不明显的差异，而是让几百个小专家各自专精于更微观的维度——某种纹理的去噪方式、某类运动边缘的处理逻辑。",
+      "三是通信层做了很深的工程优化。自研 Group Collective 通信原语，用 RDMA 替代 NVLink 实现算子级融合通信，配合自研编译器 MagiCompiler。最终用数百卡的集群训出了 400B 参数的 MoE 视频模型，训练成本大约是同参数规模行业均值的 1/10。",
+      "这条路径跟 DeepSeek 做 LLM 的思路确实相似，不是比谁卡多，而是在有限算力约束下通过架构创新和系统工程把效率拉到极致。核心模型 MAGI-2（400B MoE）预计 Q3 发布，届时 Artificial Analysis 排行榜的表现将是第一个公开验证节点。",
+      "所以我个人的判断是，现阶段投视频生成赛道，第一个要看的是 MoE 有没有跑通，这决定了模型能力的天花板在哪里，也决定了推理成本能不能撑住规模化。第二个要看的是商业化和用户粘性，毕竟大厂有一定的用户基础与流量，想要突围难度也是比较大的。",
+    ],
+  },
   {
     id: 1,
     title: "存算解耦：推理芯片突破显存墙的第三条路",
@@ -177,15 +203,6 @@ const THOUGHTS = [
     category: "半导体",
     readTime: "12 min",
     summary: "SRAM 微缩失速不是新闻，但它对存储层级结构的连锁影响仍被低估。从密度—功耗—成本三条曲线的交点出发，推演 MRAM 等新型介质从利基走向主流的时序，以及一级市场的下注窗口。",
-    highlight: true,
-  },
-  {
-    id: 3,
-    title: "低轨卫星互联网的单位经济学：星座组网如何算账",
-    date: "2025.11",
-    category: "商业航天",
-    readTime: "11 min",
-    summary: "对标 Starlink 容易，跑通单位经济学很难。从发射成本曲线、卫星寿命折旧到地面终端渗透率，拆解「千帆星座」类项目的盈亏平衡条件，以及中国供应链在其中的成本优势与短板。",
     highlight: false,
   },
   {
@@ -277,7 +294,7 @@ const NAV = [
   { id: "hero", label: "关于" },
   { id: "experience", label: "经历" },
   { id: "deals", label: "参与项目" },
-  { id: "thoughts", label: "市场思考" },
+  { id: "thoughts", label: "市场笔记" },
   { id: "reflections", label: "感悟" },
   { id: "education", label: "教育" },
   { id: "contact", label: "联系" },
@@ -391,8 +408,14 @@ function StatusBadge({ status }) {
   return <span className={"badge " + (cls[status] || "")}>{status}</span>;
 }
 
+function dateValue(date) {
+  const parts = String(date || "").match(/\d+/g) || [];
+  const [year = "0", month = "0", day = "0"] = parts;
+  return Number(year.padStart(4, "0") + month.padStart(2, "0") + day.padStart(2, "0"));
+}
+
 function sortByDateDesc(items) {
-  return [...items].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  return [...items].sort((a, b) => dateValue(b.date) - dateValue(a.date));
 }
 
 function DetailModal({ detail, onClose }) {
@@ -409,7 +432,13 @@ function DetailModal({ detail, onClose }) {
           {detail.meta?.map((m) => <span key={m}>{m}</span>)}
         </div>
         <div className="modal-content">
-          <p>待补充</p>
+          {detail.content?.length
+            ? detail.content.map((block) => (
+              typeof block === "string"
+                ? <p className="modal-paragraph" key={block}>{block}</p>
+                : <h3 className="modal-subtitle" key={block.heading}>{block.heading}</h3>
+            ))
+            : <p className="modal-empty">待补充</p>}
         </div>
       </article>
     </div>
@@ -467,10 +496,11 @@ export default function JimmyChenSite() {
     meta: [deal.round, deal.status, deal.fund].filter(Boolean),
   });
   const openThoughtDetail = (thought) => setDetail({
-    kicker: "一级市场思考",
+    kicker: "一级市场笔记",
     title: thought.title,
     date: thought.date,
     meta: [thought.category, thought.readTime].filter(Boolean),
+    content: thought.content,
   });
   const openReflectionDetail = (reflection) => setDetail({
     kicker: "成长感悟",
@@ -563,7 +593,7 @@ export default function JimmyChenSite() {
 
         {/* Thoughts */}
         <section className="section">
-          <SectionHead no="03" zh="一级市场思考" en="RESEARCH NOTES" id="thoughts" />
+          <SectionHead no="03" zh="一级市场笔记" en="RESEARCH NOTES" id="thoughts" />
           <p className="sec-sub rv">对产业趋势与投资逻辑的持续研究，观点独立，持续更新。</p>
           <div className="thoughts">
             {sortedThoughts.map((t) => (
@@ -752,7 +782,9 @@ export default function JimmyChenSite() {
         .modal-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px}
         .modal-meta span{font-family:var(--mono);font-size:11.5px;color:var(--sub);background:var(--wash);border-radius:2px;padding:3px 9px}
         .modal-content{border-top:1px solid var(--line);padding-top:30px;min-height:180px}
-        .modal-content p{font-family:var(--serif);font-size:22px;color:var(--faint);letter-spacing:.06em;text-align:center;padding:54px 0}
+        .modal-empty{font-family:var(--serif);font-size:22px;color:var(--faint);letter-spacing:.06em;text-align:center;padding:54px 0}
+        .modal-subtitle{font-family:var(--serif);font-size:19px;line-height:1.6;color:var(--oxford);margin:6px 0 14px}
+        .modal-paragraph{font-size:15px;color:#3C4654;line-height:2.05;margin-bottom:18px}
 
         .edu-grid{display:grid;gap:16px}
         .edu{border:1px solid var(--line);border-radius:4px;background:#fff;padding:24px 26px}
