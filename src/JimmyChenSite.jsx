@@ -198,12 +198,42 @@ const THOUGHTS = [
   },
   {
     id: 2,
-    title: "新型存储介质的投资时钟：从制程密度拐点说起",
+    title: "先进制程下新型存储（MRAM）投资笔记",
     date: "2026.06",
     category: "半导体",
     readTime: "12 min",
-    summary: "SRAM 微缩失速不是新闻，但它对存储层级结构的连锁影响仍被低估。从密度—功耗—成本三条曲线的交点出发，推演 MRAM 等新型介质从利基走向主流的时序，以及一级市场的下注窗口。",
+    summary: "制程演进撞墙后，传统存储在 Flash、SRAM、DRAM 三条路线上同时承压。本文从晶体管结构、存储密度、功耗与成本曲线出发，拆解 MRAM 在先进制程片上存储中的替代窗口与投资判断。",
     highlight: false,
+    content: [
+      { heading: "一、核心逻辑：制程演进撞墙，传统存储失效，新型存储窗口打开" },
+      "半导体行业过去二十年的主旋律是摩尔定律驱动制程微缩。晶体管结构经历了三代演进：Planar FET（≥28nm，栅极从 1 面控制沟道）→ FinFET（22nm → 5nm，栅极从 3 面包裹鳍状沟道）→ GAAFET / Nanosheet（3nm / 2nm，栅极从 4 面全包裹纳米片）。栅极控制力逐代增强，但代价也在加速上升，每一代的单位晶体管成本不再下降，制程微缩带来的经济性优势在 14nm 以下已基本消失。",
+      { callout: "关键判断：晶体管本身还能继续缩，但「缩了还划算」这件事已经不成立了。这个矛盾在存储领域表现得更为剧烈。" },
+      { image: "/notes/mram-transistor-scaling.png", alt: "Planar FET、FinFET 与 GAAFET 的晶体管结构演进", caption: "晶体管结构演进：栅极控制力逐代增强，但经济性优势逐步减弱。" },
+      { heading: "二、传统存储的三面「撞墙」" },
+      "AI 需求正在驱动算力芯片向 2nm 甚至 A 节点（Angstrom 级）演进，但传统存储技术各自遭遇了物理与经济的双重瓶颈：",
+      { heading: "Flash | 撞墙于 ~28nm" },
+      "Flash 操作电压需要 10–20V，远超先进制程晶体管的承受范围（<1V）。FinFET / GAA 架构与 Flash 结构根本不兼容。Flash 的出路是 3D 堆叠（3D NAND），走的是「叠层数」的路线，与逻辑制程微缩已经脱钩。",
+      { heading: "SRAM（6T 单元）| 撞墙于 ~5nm，4nm 以下面积效率不再提升" },
+      "SRAM 采用 6 个晶体管（6T）构成一个存储单元。6T 结构尺寸过大，密度低，容量受限；制程越先进，栅氧化层越薄，漏电流指数级上升，静态功耗过大。",
+      { callout: "到 4nm 以下，SRAM 面积效率基本没有提升，甚至出现面积反弹，缩了节点，存储面积反而更大。在 2nm/3nm 芯片中，SRAM 占据的面积比例不降反升，成为先进制程的核心瓶颈。" },
+      { heading: "DRAM | 撞墙 2nm" },
+      "DRAM 难以与逻辑芯片同晶圆异质集成，只能走多芯粒封装路线（HBM / CoWoS / 3D-DRAM TSV），带来带宽受限、延迟增大、功耗增加等系统级问题，且封装成本极高。",
+      { callout: "总结：Flash 在 28nm 脱钩，SRAM 在 4nm 以下失效，DRAM 被封装瓶颈卡死。三大传统存储在先进制程下全面承压，给新型存储打开了替代窗口。" },
+      { image: "/notes/mram-memory-bottlenecks.png", alt: "传统存储在先进制程下的瓶颈示意图", caption: "传统存储在先进制程下的三类瓶颈：Flash、SRAM、DRAM 分别受制于结构兼容、面积效率与封装集成。" },
+      { heading: "三、新型存储为什么在这个时间点出现？" },
+      { heading: "制程密度拐点：不是「新存储多好」，而是「旧存储走不下去了」" },
+      "传统存储撞墙是事实，但真正把新型存储从实验室推向产业化的驱动力，是密度、功耗、成本三条曲线同时触及拐点。",
+      "密度侧：SRAM 6T 在 4nm 以下面积效率不再改善，甚至反弹，芯片中存储占比不降反升。功耗侧：栅氧化层极薄导致漏电流指数级上升，SRAM 静态功耗已成为先进制程芯片的主要能耗来源之一。成本侧：先进制程单晶体管成本在 14nm 之后不再下降，SRAM 每 bit 成本随制程推进反而上升。",
+      "三条曲线在 3nm / 2nm 节点附近交汇，意味着传统存储不只是「性能不够」，而是整个经济模型失效。AI 算力的爆发式增长又不允许存储成为系统瓶颈——当计算侧推进到 2nm，存储侧停在 5nm 就开始退化，这个效率落差逼迫产业必须寻找替代方案。三星、海力士、台积电集体加码 MRAM 和 RRAM 研发，本质原因在此。",
+      { heading: "两条技术路线" },
+      "RRAM（阻性存储）：通过改变介质层的电阻状态来存储信息。结构简单，工艺兼容性较好，但耐久性和一致性方面仍有挑战，目前更多应用于存算一体等特定场景。",
+      "MRAM（磁性存储）：基于 MTJ（磁性隧道结），利用电子自旋来存储信息。量子力学中，电子自旋量子数只有两个本征值 +1/2 和 -1/2，天然对应二进制的 0 和 1——这不是人为编码，而是物理本征态。MRAM 因此具备非易失性（断电不丢数据）、无需刷新、也不需要 Flash 那样的高电压操作。",
+      { heading: "MRAM 被产业重视的现实原因" },
+      "MRAM 受到更多关注，不是因为它完美，而是因为它恰好回应了先进制程下传统存储的核心痛点：其一，CMOS 后道兼容，MTJ 可以直接沉积在逻辑芯片的后道金属层上，不需要额外晶圆或封装，片上集成成为可能，而 DRAM 的核心瓶颈恰恰是封装。其二，密度优势，MTJ 支持微缩，密度可达 SRAM 6T 单元的 6 倍以上，直接缓解面积效率退化。其三，零待机功耗——非易失性意味着静态功耗为零，而 SRAM 漏电正是其在先进制程下的核心痛点。",
+      { callout: "但 MRAM 的核心问题同样明确：写入功耗高、写入速度较慢。个人判断，MRAM 无法成为存储的终极形态，更可能是一种搭配型的中间过渡态——在传统存储全面撞墙、下一代方案尚未成熟的窗口期，扮演先进制程片上存储的补位角色。" },
+      { image: "/notes/mram-advantages.png", alt: "RRAM 与 MRAM 的新型存储优势示意图", caption: "MRAM 的核心优势：CMOS 兼容异质集成、密度优势与零待机功耗。" },
+      { remark: ["驰拓：STT-MRAM，更贴近量产落地。已向三星展示 MRAM 在 8nm 上对标 2nm/3nm SRAM 体系的能力。", "智臻：SOT-MRAM，技术前沿性强。读写速度更快、耐久性更好，但与 28nm 以下先进制程兼容量产仍有距离。"] },
+    ],
   },
   {
     id: 4,
@@ -418,6 +448,29 @@ function sortByDateDesc(items) {
   return [...items].sort((a, b) => dateValue(b.date) - dateValue(a.date));
 }
 
+function ModalBlock({ block }) {
+  if (typeof block === "string") return <p className="modal-paragraph">{block}</p>;
+  if (block.heading) return <h3 className="modal-subtitle">{block.heading}</h3>;
+  if (block.callout) return <p className="modal-callout">{block.callout}</p>;
+  if (block.image) {
+    return (
+      <figure className="modal-figure">
+        <img src={block.image} alt={block.alt || ""} />
+        {block.caption && <figcaption>{block.caption}</figcaption>}
+      </figure>
+    );
+  }
+  if (block.remark) {
+    return (
+      <aside className="modal-remark">
+        <h3>Remark</h3>
+        {block.remark.map((item) => <p key={item}>{item}</p>)}
+      </aside>
+    );
+  }
+  return null;
+}
+
 function DetailModal({ detail, onClose }) {
   if (!detail) return null;
 
@@ -433,11 +486,7 @@ function DetailModal({ detail, onClose }) {
         </div>
         <div className="modal-content">
           {detail.content?.length
-            ? detail.content.map((block) => (
-              typeof block === "string"
-                ? <p className="modal-paragraph" key={block}>{block}</p>
-                : <h3 className="modal-subtitle" key={block.heading}>{block.heading}</h3>
-            ))
+            ? detail.content.map((block, index) => <ModalBlock block={block} key={typeof block === "string" ? block : block.heading || block.callout || block.image || index} />)
             : <p className="modal-empty">待补充</p>}
         </div>
       </article>
@@ -785,6 +834,14 @@ export default function JimmyChenSite() {
         .modal-empty{font-family:var(--serif);font-size:22px;color:var(--faint);letter-spacing:.06em;text-align:center;padding:54px 0}
         .modal-subtitle{font-family:var(--serif);font-size:19px;line-height:1.6;color:var(--oxford);margin:6px 0 14px}
         .modal-paragraph{font-size:15px;color:#3C4654;line-height:2.05;margin-bottom:18px}
+        .modal-callout{font-size:15px;line-height:2;color:var(--ink);background:var(--blue-wash);border-left:3px solid var(--oxford);padding:14px 18px;margin:20px 0;font-weight:600}
+        .modal-figure{margin:26px 0 30px}
+        .modal-figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#fff}
+        .modal-figure figcaption{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.7;margin-top:9px;text-align:center}
+        .modal-remark{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px 20px;margin-top:28px}
+        .modal-remark h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--crit);margin-bottom:10px}
+        .modal-remark p{font-size:14px;color:var(--sub);line-height:1.9;margin-bottom:8px}
+        .modal-remark p:last-child{margin-bottom:0}
 
         .edu-grid{display:grid;gap:16px}
         .edu{border:1px solid var(--line);border-radius:4px;background:#fff;padding:24px 26px}
