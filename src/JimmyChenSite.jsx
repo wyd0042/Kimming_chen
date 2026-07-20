@@ -91,7 +91,7 @@ const EXPERIENCES = [
 
 
 // ── 参与投资的项目 ───────────────────────────────────────────────
-// 每个项目可以点击展开查看详情
+// 详情内容补充前，仅展示项目卡片
 // status 支持三种样式："已投资"（绿色）/ "深度评估"（蓝色）/ "已输出备忘录"（黄色）
 const DEALS = [
   {
@@ -573,24 +573,12 @@ export default function JimmyChenSite() {
   }, [detail]);
 
   const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
-  const openDealDetail = (deal) => setDetail({
-    kicker: "参与投资的项目",
-    title: deal.name,
-    date: deal.date,
-    meta: [deal.round, deal.status, deal.fund].filter(Boolean),
-  });
   const openThoughtDetail = (thought) => setDetail({
     kicker: "一级市场笔记",
     title: thought.title,
     date: thought.date,
     meta: [thought.category, thought.readTime].filter(Boolean),
     content: thought.content,
-  });
-  const openReflectionDetail = (reflection) => setDetail({
-    kicker: "成长感悟",
-    title: reflection.title,
-    date: reflection.date,
-    meta: [],
   });
 
   return (
@@ -656,11 +644,11 @@ export default function JimmyChenSite() {
         {/* Deals */}
         <section className="section">
           <SectionHead no="02" zh="参与投资的项目" en="DEAL EXPERIENCE" id="deals" />
-          <p className="sec-sub rv">参与研判与推动的真实项目（已脱敏）。点击查看项目详情。</p>
+          <p className="sec-sub rv">参与研判与推动的真实项目（已脱敏）。详情内容待后续补充。</p>
           <div className="deals">
             {sortedDeals.map((d) => (
               <article className="deal rv" key={d.id}>
-                <button className="deal-head" type="button" onClick={() => openDealDetail(d)}>
+                <div className="deal-head">
                   <div className="deal-title-block">
                     <div className="deal-title-row">
                       <h3 className="deal-name">{d.name}</h3>
@@ -668,8 +656,7 @@ export default function JimmyChenSite() {
                     </div>
                     <p className="deal-meta">{d.date} · {d.round} · {d.fund}</p>
                   </div>
-                  <span className="deal-arrow">查看详情 ›</span>
-                </button>
+                </div>
               </article>
             ))}
           </div>
@@ -699,13 +686,12 @@ export default function JimmyChenSite() {
           <SectionHead no="04" zh="成长感悟" en="REFLECTIONS" id="reflections" />
           <div className="reflections">
             {sortedReflections.map((r) => (
-              <article className="reflection rv" key={r.id} onClick={() => openReflectionDetail(r)}>
+              <article className="reflection rv" key={r.id}>
                 <div className="ref-head">
                   <h3 className="ref-title">{r.title}</h3>
                   <span className="ref-date">{r.date}</span>
                 </div>
                 <p className="ref-content">{r.content}</p>
-                <button className="ref-more" type="button" onClick={(e) => { e.stopPropagation(); openReflectionDetail(r); }}>查看详情 →</button>
               </article>
             ))}
           </div>
@@ -821,13 +807,11 @@ export default function JimmyChenSite() {
         .tag{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--wash);padding:3px 9px;border-radius:2px;letter-spacing:.03em}
 
         .deals{display:grid;gap:14px}
-        .deal{border:1px solid var(--line);border-radius:4px;background:#fff;transition:border-color .25s,box-shadow .25s,transform .25s}
-        .deal:hover{border-color:var(--oxford);box-shadow:0 4px 16px rgba(0,33,71,.06);transform:translateY(-2px)}
+        .deal{border:1px solid var(--line);border-radius:4px;background:#fff}
         .deal-head{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:20px 24px;background:none;border:none;text-align:left}
         .deal-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
         .deal-name{font-family:var(--serif);font-size:16.5px;font-weight:700;color:var(--ink)}
         .deal-meta{font-family:var(--mono);font-size:12px;color:var(--faint)}
-        .deal-arrow{font-family:var(--mono);font-size:11.5px;color:var(--oxford);flex-shrink:0;margin-top:2px;letter-spacing:.04em}
         .deal-body{padding:4px 24px 22px;border-top:1px solid var(--wash)}
         .deal-label{display:inline-block;font-family:var(--mono);font-size:10.5px;color:var(--crit);letter-spacing:.1em;margin-right:12px;min-width:62px}
         .deal-role{font-size:13.5px;color:var(--ink);padding:14px 0 8px}
@@ -850,12 +834,11 @@ export default function JimmyChenSite() {
         .thought-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);margin-top:16px;background:none;border:none;text-align:left;padding:0;align-self:flex-start}
 
         .reflections{max-width:720px}
-        .reflection{padding:26px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding-left .25s,border-color .25s}.reflection:hover{padding-left:10px;border-bottom-color:#B9C4D2}.reflection:first-of-type{padding-top:4px}.reflection:last-of-type{border-bottom:none}
+        .reflection{padding:26px 0;border-bottom:1px solid var(--line)}.reflection:first-of-type{padding-top:4px}.reflection:last-of-type{border-bottom:none}
         .ref-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:16px}
         .ref-title{font-family:var(--serif);font-size:17.5px;font-weight:700;color:var(--oxford)}
         .ref-date{font-family:var(--mono);font-size:11px;color:var(--faint);flex-shrink:0}
         .ref-content{font-size:14.5px;color:#3C4654;line-height:2}
-        .ref-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);background:none;border:none;padding:0;margin-top:12px;text-align:left}
 
         .modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(20,32,46,.44);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:32px}
         .modal-panel{position:relative;width:min(760px,100%);max-height:min(76vh,720px);overflow:auto;background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:54px 62px 58px}
@@ -907,7 +890,7 @@ export default function JimmyChenSite() {
           .section{margin-bottom:80px}
           .tl-item{grid-template-columns:1fr;gap:8px}.tl-left{text-align:left;display:flex;gap:12px;align-items:baseline;padding-left:26px}
           .thoughts{grid-template-columns:1fr}
-          .deal-head{padding:18px 18px}.deal-arrow{margin-top:10px}
+          .deal-head{padding:18px 18px}
           .modal-backdrop{padding:18px}.modal-panel{max-height:82vh;padding:48px 24px 34px}.modal-title{font-size:22px}.modal-close{top:14px;right:14px}
           .contact-card{padding:40px 24px}.br-desktop{display:none}.sec-en{display:none}
         }
