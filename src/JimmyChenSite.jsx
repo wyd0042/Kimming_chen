@@ -237,7 +237,7 @@ const THOUGHTS = [
     date: "2026/07/05",
     category: "CPU 架构",
     readTime: "9 min",
-    summary: "这篇更像给自己看的 CPU 底层笔记：从 CPU 设计流程、ISA、CISC / RISC 分野，到 x86、ARM、RISC-V 的架构差异、国内厂商与产业化风险，梳理理解 CPU 赛道时需要先搭好的基础框架。",
+    summary: "从 CPU 设计流程、ISA、CISC / RISC 分野，到 x86、ARM、RISC-V 的架构差异、国内厂商与产业化风险，梳理理解 CPU 赛道时需要先搭好的基础框架。",
     highlight: false,
     content: [
       { heading: "一、CPU 设计流程与 ISA" },
