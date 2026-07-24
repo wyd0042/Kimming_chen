@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 
 /* ╔══════════════════════════════════════════════════════════════════╗
    ║  陈金铭 · Jimmy Chen — 个人主页                                  ║
@@ -194,14 +196,100 @@ const THOUGHTS = [
       { image: "/notes/fangqing-sow-packaging.png", alt: "传统封装、Tesla Dojo SoW 与 Cerebras WSE 对比", caption: "从传统封装到 SoW / WSE：晶圆可以只是生产载体，也可以变成芯片互联平台，甚至整张晶圆就是一颗芯片。" },
       "当然，SoW 的代价也很明显：良率管控和翘曲控制难度更高，大尺寸芯片设计会导致功率激增，进一步带来高功耗和散热问题。",
       { heading: "五、为什么 Decode 是瓶颈：Prefill 与 Decode 的本质差异" },
-      "要理解推理芯片的架构选择，首先要理解大模型推理过程中 Prefill 和 Decode 两个阶段的本质区别。Prefill 阶段对用户输入的完整 prompt 做一次前向传播，所有 token 同时参与矩阵乘法，计算并行度高，因此更容易处于 compute-bound 状态，GPU 的大规模并行计算能力可以被充分利用。",
-      "Decode 阶段则是逐 token 生成，每一步只处理一个新 token，但又必须读取已经积累起来的 KV Cache。随着序列变长，KV Cache 持续增长，每生成一个 token 需要读取的数据越来越多，性能瓶颈逐渐从算力转向内存带宽与延迟。",
+      "要理解推理芯片的架构选择，首先要理解大模型推理过程中 Prefill 和 Decode 两个阶段在计算复杂度与内存访问模式上的根本差异。下面基于标准 Transformer decoder block，用 FLOP 计数与 Roofline 模型拆解。",
+      { heading: "5.1 Transformer Block 的基本计算结构" },
+      "给定输入 X，序列长度为 n，模型维度为 d。Attention 首先通过线性投影得到 Q、K、V，核心权重由训练得到，推理阶段固定不变。",
+      { math: String.raw`\mathbf{X}\in\mathbb{R}^{n\times d},\quad
+\mathbf{Q}=\mathbf{X}\mathbf{W}_Q,\quad
+\mathbf{K}=\mathbf{X}\mathbf{W}_K,\quad
+\mathbf{V}=\mathbf{X}\mathbf{W}_V,\quad
+\mathbf{W}_Q,\mathbf{W}_K,\mathbf{W}_V\in\mathbb{R}^{d\times d}`, caption: "Q / K / V 投影：Transformer 每层先把输入 token 映射到查询、键和值空间。" },
+      { math: String.raw`\mathrm{Attn}(\mathbf{Q},\mathbf{K},\mathbf{V})
+=\mathrm{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^{\top}}{\sqrt{d_k}}\right)\mathbf{V},\quad
+d_k=\frac{d}{h}`, caption: "Attention 核心计算：Q 与 K 做相似度，再对 V 加权汇聚。" },
+      "标准 FFN 是两层全连接加非线性激活。通常 FFN 参数量显著大于 Attention，是 Decode 阶段权重读取的重要来源。",
+      { math: String.raw`\mathrm{FFN}(\mathbf{x})
+=\sigma(\mathbf{x}\mathbf{W}_1+\mathbf{b}_1)\mathbf{W}_2+\mathbf{b}_2,\quad
+\mathbf{W}_1\in\mathbb{R}^{d\times4d},\quad
+\mathbf{W}_2\in\mathbb{R}^{4d\times d}`, caption: "FFN 计算：两层矩阵乘法，中间维度通常扩展到 4d。" },
+      { heading: "5.2 Prefill 阶段：为什么是 Compute-Bound" },
+      "Prefill 阶段对完整 prompt 做一次前向传播，所有 n 个 token 同时参与矩阵乘法，计算并行度高。按单层 Transformer 估算，Q/K/V 投影、Attention score、Score × V、输出投影和 FFN 两层加总后：",
+      { math: String.raw`\begin{aligned}
+F_{\mathrm{prefill}}
+&= 3(2nd^2)+2n^2d+2n^2d+2nd^2+8nd^2+8nd^2\\
+&=\boxed{24nd^2+4n^2d}\quad\text{per layer}
+\end{aligned}`, caption: "Prefill 单层 FLOPs：主项随 n 成比例放大，长 prompt 下可形成很高并行度。" },
+      "Prefill 阶段需要从 HBM 加载全部权重参数。Attention 部分权重约为 4d²，FFN 权重约为 8d²，FP16 下每个参数 2 bytes：",
+      { math: String.raw`M_{\mathrm{weights}}
+=(4d^2+8d^2)\times2
+=24d^2\ \mathrm{bytes}`, caption: "Prefill 权重内存访问量：主要读取固定权重。" },
+      { math: String.raw`\mathrm{AI}_{\mathrm{prefill}}
+=\frac{F_{\mathrm{prefill}}}{M_{\mathrm{weights}}}
+\approx\frac{24nd^2}{24d^2}
+=n\quad\mathrm{FLOP/byte}`, caption: "Prefill 算术强度：近似等于 prompt token 数 n。" },
+      "以典型 prompt 长度 n = 1024、NVIDIA A100（312 TFLOPS FP16，2 TB/s HBM 带宽）为参考，其 Roofline 拐点为：",
+      { math: String.raw`\mathrm{AI}_{\mathrm{ridge}}
+=\frac{312\times10^{12}}{2\times10^{12}}
+=156\quad\mathrm{FLOP/byte}`, caption: "A100 的 Roofline ridge point：算力 / 带宽。" },
+      { math: String.raw`\mathrm{AI}_{\mathrm{prefill}}=1024\gg156=\mathrm{AI}_{\mathrm{ridge}}
+\quad\Rightarrow\quad
+\mathrm{Compute\text{-}Bound}`, caption: "结论：Prefill 的瓶颈在算力，不在带宽，GPU 的大规模并行能力能被充分利用。" },
+      { heading: "5.3 Decode 阶段：为什么是 Memory-Bound" },
+      "Decode 阶段逐 token 生成，每步仅处理一个新 token。输入从 n 个 token 退化为单个向量，但 Attention 仍然需要读取完整 KV Cache。",
+      { math: String.raw`\mathbf{x}_t\in\mathbb{R}^{1\times d},\quad
+\mathbf{q}_t=\mathbf{x}_t\mathbf{W}_Q,\quad
+\mathbf{k}_t=\mathbf{x}_t\mathbf{W}_K,\quad
+\mathbf{v}_t=\mathbf{x}_t\mathbf{W}_V`, caption: "Decode 每一步只为当前 token 生成新的 q、k、v。" },
+      { math: String.raw`\mathbf{K}_{\mathrm{cache}}\leftarrow
+\begin{bmatrix}
+\mathbf{K}_{\mathrm{cache}}\\
+\mathbf{k}_t
+\end{bmatrix}\in\mathbb{R}^{t\times d},\quad
+\mathbf{V}_{\mathrm{cache}}\leftarrow
+\begin{bmatrix}
+\mathbf{V}_{\mathrm{cache}}\\
+\mathbf{v}_t
+\end{bmatrix}\in\mathbb{R}^{t\times d}`, caption: "KV Cache 追加：每生成一个 token，K/V Cache 都增长一行。" },
+      { math: String.raw`\mathrm{scores}
+=\frac{\mathbf{q}_t\mathbf{K}_{\mathrm{cache}}^{\top}}{\sqrt{d_k}}
+\in\mathbb{R}^{1\times t},\quad
+\mathrm{output}
+=\mathrm{softmax}(\mathrm{scores})\mathbf{V}_{\mathrm{cache}}
+\in\mathbb{R}^{1\times d}`, caption: "Decode Attention：当前 token 要回看前面所有 token 的 K/V Cache。" },
+      "此时 score 计算 FLOPs 只有 2td 量级，但需要读取整个 KV Cache。FFN 计算本身不变，只是 batch size 退化为 1，仍要加载 FFN 权重。",
+      { math: String.raw`\begin{aligned}
+F_{\mathrm{decode}}&=\boxed{24d^2+4td}\\
+M_{\mathrm{decode}}&=\boxed{48d^2+8td\ \mathrm{bytes}}
+\end{aligned}\quad\text{per layer}`, caption: "Decode 单层 FLOPs 与内存访问：计算量下降，但权重和 KV Cache 读取仍然沉重。" },
+      { math: String.raw`\mathrm{AI}_{\mathrm{decode}}
+=\frac{24d^2+4td}{48d^2+8td}
+=\frac{24d^2+4td}{2(24d^2+4td)}
+=\frac{1}{2}\quad\mathrm{FLOP/byte}`, caption: "Decode 算术强度：与模型维度 d、生成长度 t 无关，只有 0.5 FLOP/byte。" },
+      { math: String.raw`\mathrm{AI}_{\mathrm{decode}}=0.5\ll156=\mathrm{AI}_{\mathrm{ridge}}
+\quad\Rightarrow\quad
+\mathrm{Memory\text{-}Bound}`, caption: "结论：Decode 的瓶颈在内存带宽，而不是纯算力。" },
+      { math: String.raw`\frac{\mathrm{AI}_{\mathrm{prefill}}}{\mathrm{AI}_{\mathrm{decode}}}
+\approx\frac{1024}{0.5}
+\approx2000\times`, caption: "Prefill 与 Decode 的算术强度相差约 2000 倍，这就是同一套 GPU 难以同时高效服务两个阶段的数学根因。" },
+      "因此，Prefill 阶段适合部署在高算力硬件上，Decode 阶段更依赖高带宽、低延迟硬件。",
       { image: "/notes/fangqing-kv-cache-growth.png", alt: "Prefill 和 Decode 阶段 KV Cache 写入与读取过程", caption: "Prefill 一次性写入 K/V Cache；Decode 每生成一个新 token，都要读取已有 Cache 并追加新行。" },
       { image: "/notes/fangqing-prefill-decode-cache.png", alt: "Transformer 各层在 Prefill 和 Decode 阶段的 KV Cache 读写", caption: "KV Cache 随层数、序列长度、隐藏维度和精度增长，越到后面 Decode 每步读取的数据越多。" },
-      "从 Roofline 视角看，Prefill 和 Decode 的算术强度差异巨大，这就是同一套 GPU 硬件无法同时高效服务两个阶段的数学根因。Prefill 适合高算力硬件，Decode 更依赖高带宽、低延迟硬件。",
-      "进一步看 Decode 内部，Attention 和 FFN 的计算特征也不同。Attention 的主要开销来自动态增长的 KV Cache 读取，对内存带宽和延迟高度敏感；FFN 的权重矩阵是静态的，如果能够常驻片上 SRAM，有机会把带宽瓶颈转化为计算受限问题。",
+      { heading: "5.4 Decode 内部的异构性：Attention 与 FFN 分离依据" },
+      "Decode 阶段整体是 memory-bound，但 Attention 和 FFN 的计算特征仍然不同。Attention 的主要开销来自 KV Cache 读取，每步需读取 K 和 V 各 t × d 个 FP16 元素。",
+      { math: String.raw`\mathrm{AI}_{\mathrm{attn}}
+=\frac{4td}{4td\times2}
+=0.5\quad\mathrm{FLOP/byte}`, caption: "Attention 子模块：动态 KV Cache 决定了它对内存带宽和延迟高度敏感。" },
+      "FFN 的权重矩阵是静态的，每层固定不变；如果 FFN 权重能常驻片上 SRAM，其有效内存访问会显著下降，从而把 FFN 从 memory-bound 推向 compute-bound。",
+      { math: String.raw`\mathrm{FFN\ weights}:\quad
+\mathbf{W}_1\in\mathbb{R}^{d\times4d},\quad
+\mathbf{W}_2\in\mathbb{R}^{4d\times d},\quad
+M_{\mathrm{FFN}}=16d^2\times2\ \mathrm{bytes}`, caption: "FFN 子模块：权重体量大，但权重静态，适合通过片上 SRAM 缓存提高有效带宽。" },
       { callout: "这就是将 Attention 和 FFN 分离部署的核心依据：Attention 适合高带宽硬件，FFN 适合高算力和高片上存储命中的硬件。" },
       "因此，Decode 阶段优化可以统一理解为提升有效算术强度：一类方法是减少内存访问量，例如量化、GQA、KV Cache 压缩；另一类是增加每次访问的有效计算量，例如 Speculative Decoding 和 Continuous Batching。",
+      { math: String.raw`\mathrm{AI}_{\mathrm{effective}}
+=\frac{F_{\mathrm{effective}}}{M_{\mathrm{effective}}}\uparrow
+\quad\Rightarrow\quad
+\mathrm{move\ toward\ the\ Roofline\ ridge}`, caption: "Decode 优化的统一框架：减少 M，增加 F，让有效算术强度向 Roofline 拐点靠近。" },
       { heading: "六、昉擎科技：从系统级架构重新定义推理基础设施" },
       "昉擎科技与传统 AI 芯片公司的最大区别在于，它不是从单颗芯片性能出发，而是从整个推理系统架构进行设计。传统 AI 芯片公司更多是在 GPU、ASIC、NPU 等已有范式下做优化，提升算力、降低功耗或进行国产替代；昉擎科技要解决的是大模型推理过程中 GPU 架构与实际需求之间的结构性不匹配。",
       "具体来说，昉擎科技在推理流程内部进一步拆分，将 Attention 和 FFN 两个模块进行异构设计：Attention 部署在带宽更大的硬件上，FFN 部署在计算能力更强的硬件上，通过不同芯片承担不同任务，提高整体推理效率。",
@@ -565,10 +653,26 @@ function sortByDateDesc(items) {
   return [...items].sort((a, b) => dateValue(b.date) - dateValue(a.date));
 }
 
+function MathBlock({ tex, caption }) {
+  const html = katex.renderToString(tex, {
+    displayMode: true,
+    throwOnError: false,
+    strict: "ignore",
+  });
+
+  return (
+    <figure className="modal-math">
+      <div className="math-scroll" dangerouslySetInnerHTML={{ __html: html }} />
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  );
+}
+
 function ModalBlock({ block }) {
   if (typeof block === "string") return <p className="modal-paragraph">{block}</p>;
   if (block.heading) return <h3 className="modal-subtitle">{block.heading}</h3>;
   if (block.callout) return <p className="modal-callout">{block.callout}</p>;
+  if (block.math) return <MathBlock tex={block.math} caption={block.caption} />;
   if (block.image) {
     return (
       <figure className="modal-figure">
@@ -935,6 +1039,10 @@ export default function JimmyChenSite() {
         .modal-subtitle{font-family:var(--serif);font-size:19px;line-height:1.6;color:var(--oxford);margin:6px 0 14px}
         .modal-paragraph{font-size:15px;color:#3C4654;line-height:2.05;margin-bottom:18px}
         .modal-callout{font-size:15px;line-height:2;color:var(--ink);background:var(--blue-wash);border-left:3px solid var(--oxford);padding:14px 18px;margin:20px 0;font-weight:600}
+        .modal-math{margin:22px 0 24px}
+        .math-scroll{overflow-x:auto;overflow-y:hidden;background:#F8FAFC;border:1px solid rgba(0,33,71,.12);border-radius:4px;padding:18px 20px}
+        .math-scroll .katex-display{margin:0;min-width:max-content}
+        .modal-math figcaption{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.7;margin-top:8px;text-align:center}
         .modal-figure{margin:26px 0 30px}
         .modal-figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#fff}
         .modal-figure figcaption{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.7;margin-top:9px;text-align:center}
