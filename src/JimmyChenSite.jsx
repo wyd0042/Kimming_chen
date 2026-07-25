@@ -38,7 +38,7 @@ const EXPERIENCES = [
     period: "2026.05 — 至今",           // 时间段
     org: "普洛斯隐山资本",               // 公司名
     orgEn: "GLP Hidden Hill Capital",   // 英文名（可选，留空 "" 则不显示）
-    role: "投资分析实习生",              // 职位
+    role: "实习经历",                  // 职位
     loc: "上海",                        // 城市
     current: true,                      // 是否当前经历（只留一条 true）
     bullets: [                          // 工作内容，每条一个字符串
@@ -52,7 +52,7 @@ const EXPERIENCES = [
     period: "2026.01 — 2026.05",
     org: "光源资本",
     orgEn: "Lighthouse Capital",
-    role: "分析师实习生",
+    role: "实习经历",
     loc: "上海",
     current: false,
     bullets: [
@@ -66,7 +66,7 @@ const EXPERIENCES = [
     period: "2025.09 — 2025.12",
     org: "易石资本",
     orgEn: "Yishi Capital",
-    role: "投资分析实习生",
+    role: "实习经历",
     loc: "珠海",
     current: false,
     bullets: [
@@ -79,7 +79,7 @@ const EXPERIENCES = [
     period: "2023.06 — 2023.09",
     org: "联通数字科技",
     orgEn: "China Unicom Digital Tech",
-    role: "模型开发工程师实习生",
+    role: "实习经历",
     loc: "北京",
     current: false,
     bullets: [
