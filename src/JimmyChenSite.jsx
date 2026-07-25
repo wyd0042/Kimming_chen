@@ -818,7 +818,7 @@ export default function JimmyChenSite() {
                 <div className={"tl-body " + (e.current ? "tl-current" : "")}>
                   <div className="tl-dot" />
                   <h3 className="tl-org">{e.org}{e.orgEn && <span className="tl-org-en">{e.orgEn}</span>}</h3>
-                  {e.role && <p className="tl-role">{e.role}</p>}
+                  <p className="tl-role">{e.role || "\u00a0"}</p>
                   <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
                   <div className="tags">{e.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</div>
                 </div>
