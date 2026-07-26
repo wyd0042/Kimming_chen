@@ -723,6 +723,13 @@ export default function JimmyChenSite() {
     meta: [thought.category, thought.readTime].filter(Boolean),
     content: thought.content,
   });
+  const openReflectionDetail = (reflection) => setDetail({
+    kicker: "成长感悟",
+    title: reflection.title,
+    date: reflection.date,
+    meta: [],
+    content: reflection.content.split(/\n{2,}/),
+  });
 
   return (
     <div className="site">
@@ -812,16 +819,12 @@ export default function JimmyChenSite() {
           <SectionHead no="03" zh="成长感悟" en="REFLECTIONS" id="reflections" />
           <div className="reflections">
             {sortedReflections.map((r) => (
-              <article className="reflection rv" key={r.id}>
+              <article className="reflection rv" key={r.id} onClick={() => openReflectionDetail(r)}>
                 <div className="ref-head">
                   <h3 className="ref-title">{r.title}</h3>
                   <span className="ref-date">{r.date}</span>
                 </div>
-                <div className="ref-content">
-                  {r.content.split(/\n{2,}/).map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
+                <button className="ref-more" type="button" onClick={(e) => { e.stopPropagation(); openReflectionDetail(r); }}>查看详情 →</button>
               </article>
             ))}
           </div>
@@ -966,13 +969,13 @@ export default function JimmyChenSite() {
         .thought-summary{font-size:13.5px;color:var(--sub);flex:1}
         .thought-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);margin-top:16px;background:none;border:none;text-align:left;padding:0;align-self:flex-start}
 
-        .reflections{max-width:720px}
-        .reflection{padding:26px 0;border-bottom:1px solid var(--line)}.reflection:first-of-type{padding-top:4px}.reflection:last-of-type{border-bottom:none}
+        .reflections{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .reflection{border:1px solid var(--line);border-radius:4px;background:#fff;padding:20px 24px;cursor:pointer;transition:border-color .25s,transform .25s,box-shadow .25s}
+        .reflection:hover{border-color:var(--oxford);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,33,71,.07)}
         .ref-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:16px}
         .ref-title{font-family:var(--serif);font-size:17.5px;font-weight:700;color:var(--oxford)}
         .ref-date{font-family:var(--mono);font-size:11px;color:var(--faint);flex-shrink:0}
-        .ref-content{font-size:14.5px;color:#3C4654;line-height:2}
-        .ref-content p{margin:0 0 14px;white-space:pre-line}.ref-content p:last-child{margin-bottom:0}
+        .ref-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);background:none;border:none;text-align:left;padding:0}
 
         .modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(20,32,46,.44);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:32px}
         .modal-panel{position:relative;width:min(760px,100%);max-height:min(76vh,720px);overflow:auto;background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:54px 62px 58px}
@@ -985,7 +988,7 @@ export default function JimmyChenSite() {
         .modal-content{border-top:1px solid var(--line);padding-top:30px;min-height:180px}
         .modal-empty{font-family:var(--serif);font-size:22px;color:var(--faint);letter-spacing:.06em;text-align:center;padding:54px 0}
         .modal-subtitle{font-family:var(--serif);font-size:19px;line-height:1.6;color:var(--oxford);margin:6px 0 14px}
-        .modal-paragraph{font-size:15px;color:#3C4654;line-height:2.05;margin-bottom:18px}
+        .modal-paragraph{font-size:15px;color:#3C4654;line-height:2.05;margin-bottom:18px;white-space:pre-line}
         .modal-callout{font-size:15px;line-height:2;color:var(--ink);background:var(--blue-wash);border-left:3px solid var(--oxford);padding:14px 18px;margin:20px 0;font-weight:600}
         .modal-math{margin:22px 0 24px}
         .math-scroll{overflow-x:auto;overflow-y:hidden;background:#F8FAFC;border:1px solid rgba(0,33,71,.12);border-radius:4px;padding:18px 20px}
@@ -1027,7 +1030,7 @@ export default function JimmyChenSite() {
           .hero{grid-template-columns:1fr;gap:36px;padding-top:104px}.name-zh{font-size:42px}.hero-visual{order:2}.matrix{max-width:300px}
           .section{margin-bottom:80px}
           .tl-item{grid-template-columns:1fr;gap:8px}.tl-left{text-align:left;display:flex;gap:12px;align-items:baseline;padding-left:26px}
-          .thoughts{grid-template-columns:1fr}
+          .thoughts,.reflections{grid-template-columns:1fr}
           .deal-head{padding:18px 18px}
           .modal-backdrop{padding:18px}.modal-panel{max-height:82vh;padding:48px 24px 34px}.modal-title{font-size:22px}.modal-close{top:14px;right:14px}
           .contact-card{padding:40px 24px}.br-desktop{display:none}.sec-en{display:none}
