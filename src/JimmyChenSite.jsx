@@ -755,7 +755,6 @@ export default function JimmyChenSite() {
         <section className="section">
           <SectionHead no="01" zh="一级市场投资笔记" en="PRIMARY MARKET NOTES" id="thoughts" />
           <div className="notes-intro rv">
-            <p>这些笔记是我一线投研工作的公开部分。方法是固定的：从技术架构本身出发，逐层往下追问「需求会不会变成订单、订单会不会变成利润」。不复述共识叙事，只写自己验证过的判断。</p>
             <div className="notes-coverage">
               <span className="notes-label">研究覆盖</span>
               {["AI 推理芯片", "AI CPU", "CPU 架构", "半导体", "AI 视频生成"].map((tag) => <span className="tag" key={tag}>{tag}</span>)}
@@ -938,7 +937,6 @@ export default function JimmyChenSite() {
         .badge-invested{background:#E2EEE4;color:#1F5C33}.badge-eval{background:var(--blue-wash);color:var(--oxford)}.badge-memo{background:#F4EEDC;color:#7A5F1E}
 
         .notes-intro{border-left:3px solid var(--oxford);padding:8px 0 8px 28px;margin:-6px 0 28px}
-        .notes-intro p{font-size:17px;line-height:2.05;color:#526071;margin-bottom:18px}
         .notes-coverage{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
         .notes-label{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.12em}
         .thoughts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
