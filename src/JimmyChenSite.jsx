@@ -77,7 +77,7 @@ const EXPERIENCES = [
   },
   {
     period: "2023.06 — 2023.09",
-    org: "联通数字科技",
+    org: "联通数字科技有限公司",
     orgEn: "China Unicom Digital Tech",
     role: "",
     loc: "北京",
