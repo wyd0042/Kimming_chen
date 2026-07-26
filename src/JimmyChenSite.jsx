@@ -164,6 +164,15 @@ const DEALS = [
 // highlight: true 的文章会特别高亮显示
 const THOUGHTS = [
   {
+    id: 9,
+    title: "Liber AI",
+    date: "2026/07/26",
+    category: "AI 应用",
+    readTime: "待补充",
+    summary: "待补充",
+    highlight: false,
+  },
+  {
     id: 8,
     title: "AI 推理芯片架构趋势与昉擎科技深度解析",
     date: "2026/07/24",
