@@ -410,21 +410,32 @@ M_{\mathrm{FFN}}=16d^2\times2\ \mathrm{bytes}`, caption: "FFN 子模块：权重
 const REFLECTIONS = [
   {
     id: 1,
-    title: "从数学证明到投资判断",
-    date: "2026.05",
-    content: "数学训练给我的最大礼物，不是计算能力，而是对「确定性边界」的敏感。证明里每一步都必须严格成立；投资判断恰恰相反——你永远在信息不完整时下注。但两者共享同一个内核：清楚地知道哪些是你验证过的，哪些是你假设的。我见过太多投资逻辑把假设当成了结论，而尽调的本质，就是把假设一条条搬回验证区。",
+    title: "明道若昧 进道若退",
+    date: "2026.07",
+    content: `最近刚结束WAIC大会，也跟着老板听了不少路演，真的累惨了（具身智能真的贵得离谱🤮）
+
+但有一个瞬间让我挺感慨的，在徐汇AI馆逛的时候，发现差不多一半的项目我之前都在线上聊过，于是可以自然而然就给良哥介绍起来：这家主要做什么、技术路径是什么、技术壁垒在哪、团队背景怎么样。比如现在国内很火的视频生成模型，核心瓶颈其实在于谁能先跑通视频MoE（除了Seedance之外），才能把成本真正降下来。而视频MoE最难解决的其实是Consistency的问题，这个MoE做不好未必能很连贯，但MoE这一点在文本生成里已经是基本操作了。
+
+回头想想还蛮有意思得。以前每次聊完一个项目，总觉得聊完就聊完了，没有明确的下一步，好像时间白花了。但其实对行业的浅薄理解就是在这些"看似无用"的对话里一点点长出来的。明道若昧，进道若退。真正在学习的时候，你往往感觉自己什么都没做。
+
+其实生活中很多小事也是这样！
+1. 每天地铁上把音乐换成播客，听硅谷101、What's Next这些，了解下科技前沿！
+2. 交流的时候随手录个音，回来再复盘一遍。
+这些事情单拿出来都不起眼，但日积月累，你愿意坚持去做其实还蛮能拉开差距的！`,
   },
   {
-    id: 3,
-    title: "用 AI Agent 重构自己的投研工作流",
-    date: "2025.12",
-    content: "我搭了一个 Agent 自动扫描同业 FA 的在手项目动态，生成结构化摘要。它替代的不是思考，而是「信息搬运」这个最消耗精力却最没有认知增量的环节。这件事让我确信：未来投研的分水岭不在于谁的信息更多，而在于谁能把省下来的时间真正花在「构建判断框架」上。工具会趋同，判断不会。",
-  },
-  {
-    id: 4,
-    title: "在牛津学到的不是数学，是如何逼近一个问题",
-    date: "2025.06",
-    content: "我的论文做的是大规模稀疏矩阵的加速求解——听起来和投资毫无关系。但 SS-GMRES 的核心思想是：识别出少数「必须极高精度」的关键方程，把资源集中在那里，其余部分容忍误差。后来我发现这就是尽调的最优策略：一个项目有一百个可以问的问题，但真正决定生死的假设往往只有两三个。找到它们，把火力集中在那里。",
+    id: 2,
+    title: "塞翁失马 焉知非福",
+    date: "2026.06",
+    content: `最近刷到高考失利，有几点想分享的！回想起来高考原来也已经6年前了，自从高二开始读书后一路从710名进步到140名，虽然高考并不好失常去了BNBU，当时觉得天塌下来，对未来的那种无助、迷茫、焦虑，甚至对未来感到害怕的情绪涌上心头！
+
+但去了UIC之后我非常幸运，遇到了非常多欣赏我的老师，他们永远比我自己更加相信我，才让我后来去了牛津读研究生！其实我还蛮感谢18岁这个挫折的，他让我在18岁有机会面对挫折这个课题，让我的逆商得到了极大的锻炼！高考仅仅只是人生的一小步，在失败过后，你是否有勇气为了自己在拼劲全力再博一次，再争取一次！
+
+毕业后，我放弃了原定的工作路线去菊花🌼上班，因为我一直坚信程序员并非我的终点，选择去毫不相干的一级市场上班！在这里我非常感谢xx的引荐让我有机会去了卖方上班，我本来只想工作几个月就回家卖布，但在工作中我发现了自己真真正正的缺点不足之处！但我仍然坚信卖方也并非我最后的去处！
+
+之后我便开始了长达几个月的准备，面过红杉，面过真格，面过IDG等等，这些都是我曾经从来不敢想的公司，不断的被拒绝不断的站起来，这种不服输的精神是18岁的失利带给我的！这里引用黄仁勋的一句话：如果你想进步，最重要的是你的resilience，并非你的smart！但我非常幸运呢，我遇到了欣赏我的人，让我有机会真真正正去到买方上班！
+
+分享到这里，我并非想自夸，我只想用自己的经历分享给大家Never let others tell you you can't do something. 要永远的相信自己，更要相信事物的发展是螺旋式上升、波浪式前进的！从双非到牛津，从双非到一级市场，把所有的不可能都变成现实，在这个过程中只有我自己知道一筹莫展的时刻，深度怀疑自己能力的时刻，但请相信是金子总会发光，我们唯一能做的就是打造自身价值，让未来的我们闪闪发光！`,
   },
   // ✏️ 添加新感悟：复制上面任意一段，改 id 和内容
 ];
@@ -806,7 +817,11 @@ export default function JimmyChenSite() {
                   <h3 className="ref-title">{r.title}</h3>
                   <span className="ref-date">{r.date}</span>
                 </div>
-                <p className="ref-content">{r.content}</p>
+                <div className="ref-content">
+                  {r.content.split(/\n{2,}/).map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
               </article>
             ))}
           </div>
@@ -957,6 +972,7 @@ export default function JimmyChenSite() {
         .ref-title{font-family:var(--serif);font-size:17.5px;font-weight:700;color:var(--oxford)}
         .ref-date{font-family:var(--mono);font-size:11px;color:var(--faint);flex-shrink:0}
         .ref-content{font-size:14.5px;color:#3C4654;line-height:2}
+        .ref-content p{margin:0 0 14px;white-space:pre-line}.ref-content p:last-child{margin-bottom:0}
 
         .modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(20,32,46,.44);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:32px}
         .modal-panel{position:relative;width:min(760px,100%);max-height:min(76vh,720px);overflow:auto;background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:54px 62px 58px}
