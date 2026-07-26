@@ -30,68 +30,6 @@ const PROFILE = {
 };
 
 
-// ── 实习 / 工作经历 ──────────────────────────────────────────────
-// 按时间倒序排列，最新的在最前面
-// current: true 的那条会高亮显示（边线变深色 + 圆点发光）
-const EXPERIENCES = [
-  {
-    period: "2026.05 — 至今",           // 时间段
-    org: "普洛斯隐山资本",               // 公司名
-    orgEn: "GLP Hidden Hill Capital",   // 英文名（可选，留空 "" 则不显示）
-    role: "",                         // 职位
-    loc: "上海",                        // 城市
-    current: true,                      // 是否当前经历（只留一条 true）
-    bullets: [                          // 工作内容，每条一个字符串
-      "推动团队完成某新型存储介质芯片公司天使++轮投资（300 万美元）：系统拆解 GPU+HBM、SRAM 近存、MRAM 存算三条技术路线的架构原理与商业化差异，基于先进制程密度拐点识别投资机会，为投资决策提供底层判断。",
-      "对某 RISC-V 芯片公司、某 ARM 架构 AI 服务器 CPU 公司等重点标的，沿技术路线从架构、供应链到商业化路径逐层拆解，搭建可比公司分析框架，输出投资建议。",
-      "基于赛道研究主动挖掘初创标的，覆盖 AI 芯片、AI4S、核聚变等方向；通过牛津校友网络挖掘某核聚变初创项目，独立完成技术路线与商业化可行性评估，输出项目备忘录。",
-    ],
-    tags: ["新型存储", "AI 芯片", "核聚变", "天使++轮"],  // 标签
-  },
-  {
-    period: "2026.01 — 2026.05",
-    org: "光源资本",
-    orgEn: "Lighthouse Capital",
-    role: "",
-    loc: "上海",
-    current: false,
-    bullets: [
-      "系统跟踪国内外 AI 推理芯片赛道，按技术路线（GPGPU / DSA / 可重构数据流 / 存算解耦）梳理 20+ 家厂商图谱，横向对比架构、存储方案、封装工艺与商业化进展。",
-      "针对某存算解耦架构推理芯片公司独立完成约 30 页研究报告：围绕 Prefill / Decoding 负载差异与显存墙瓶颈，构建「有效吞吐量–TCO」分析框架，形成技术竞争力与商业可行性的独立判断。",
-      "设计结构化尽调问题清单，主导 6 场管理层及产业链专家访谈的信息整理与风险提炼，交叉验证技术路线可行性，推动项目从初步接触进入深度评估阶段。",
-    ],
-    tags: ["AI 推理芯片", "存算解耦", "尽职调查"],
-  },
-  {
-    period: "2025.09 — 2025.12",
-    org: "易石资本",
-    orgEn: "Yishi Capital",
-    role: "",
-    loc: "珠海",
-    current: false,
-    bullets: [
-      "聚焦大模型赛道，系统对比并持续监测国内头部基座模型厂商（MiniMax / 智谱 / 阶跃星辰 / 月之暗面）在技术路径、产品化进度、商业化模式与融资估值上的差异，输出竞争格局报告。",
-      "独立 sourcing 上海垣信卫星（「千帆星座」低轨卫星互联网核心运营方，规划 1.5 万颗星组网，对标 SpaceX 星链），完成行业研究与项目判断后推动团队跟进，参与完成 A+ 轮投资 2000 万人民币。",
-    ],
-    tags: ["大模型", "商业航天", "A+ 轮"],
-  },
-  {
-    period: "2023.06 — 2023.09",
-    org: "联通数字科技有限公司",
-    orgEn: "China Unicom Digital Tech",
-    role: "",
-    loc: "北京",
-    current: false,
-    bullets: [
-      "基于 Python 对高频非平稳数据进行多尺度特征工程，结合 Prophet 与滚动窗口机制搭建混合预测模型，通过参数约束提升极端值下的稳健性。",
-      "搭建基于 Rolling-Window 的滚动回测框架，结合 Walk-forward 验证实现模型性能自动化评估与迭代优化，整体准确率提升 15%。",
-    ],
-    tags: ["时间序列", "Python", "机器学习"],
-  },
-  // ✏️ 添加新经历：复制上面任意一段，粘贴到这里，修改内容即可
-];
-
-
 // ── 参与投资的项目 ───────────────────────────────────────────────
 // 详情内容补充前，仅展示项目卡片
 // status 支持三种样式："已投资"（绿色）/ "深度评估"（蓝色）/ "已输出备忘录"（黄色）
@@ -102,7 +40,7 @@ const DEALS = [
     name: "某新型存储介质芯片公司",                    // 项目名（脱敏）
     round: "天使++轮 · 300 万美元",                   // 轮次与金额
     status: "已投资",                                 // 状态标签
-    fund: "普洛斯隐山资本",                            // 所在基金
+    fund: "",                                          // 所在机构（脱敏后不显示）
     myRole: "技术路线拆解 · 投资判断",                  // 你的角色
     thesis: "先进制程逼近密度拐点，传统 SRAM/DRAM 路线的功耗与面积代价陡增，新型存储介质在 AI 推理场景存在结构性替代窗口。",  // 投资论点
     details: [                                        // 具体工作，每条一个字符串
@@ -114,10 +52,10 @@ const DEALS = [
   {
     id: 2,
     date: "2025.11",
-    name: "上海垣信卫星",
+    name: "某低轨卫星互联网公司",
     round: "A+ 轮 · 2000 万人民币",
     status: "已投资",
-    fund: "易石资本",
+    fund: "",
     myRole: "独立 Sourcing · 行业研究 · 推动立项",
     thesis: "「千帆星座」是国内低轨卫星互联网最具确定性的组网主体：1.5 万颗星规划、对标 Starlink，轨道与频谱资源具有先发排他性。",
     details: [
@@ -132,7 +70,7 @@ const DEALS = [
     name: "某存算解耦架构推理芯片公司",
     round: "深度评估阶段",
     status: "深度评估",
-    fund: "光源资本",
+    fund: "",
     myRole: "30 页独立研究报告 · 主导 6 场访谈",
     thesis: "推理负载中 Prefill / Decoding 的算力—带宽需求错配，是显存墙之外被低估的结构性瓶颈，存算解耦架构存在差异化机会。",
     details: [
@@ -147,7 +85,7 @@ const DEALS = [
     name: "某核聚变初创项目",
     round: "早期接触",
     status: "已输出备忘录",
-    fund: "普洛斯隐山资本",
+    fund: "",
     myRole: "校友网络挖掘 · 独立技术评估",
     thesis: "聚变路线的资本开支与工程节点高度非线性，早期判断的核心是「物理可行性」与「工程降本曲线」的解耦分析。",
     details: [
@@ -498,7 +436,7 @@ const EDUCATION = [
     school: "牛津大学",
     schoolEn: "University of Oxford",
     degree: "数学建模与科学计算 硕士",
-    period: "2024.09 — 2027.01",
+    period: "",
     loc: "英国 牛津",
     grade: "Distinction（前 10%）",
     notes: [
@@ -511,7 +449,7 @@ const EDUCATION = [
     school: "北师香港浸会大学",
     schoolEn: "BNU-HKBU United International College",
     degree: "金融数学 本科",
-    period: "2020.09 — 2024.06",
+    period: "",
     loc: "中国 珠海",
     grade: "3.80 / 4.0（专业第一）",
     notes: [
@@ -536,9 +474,8 @@ const SKILLS = [
 // id 对应页面区块，label 是显示文字
 const NAV = [
   { id: "hero", label: "关于" },
-  { id: "experience", label: "经历" },
+  { id: "thoughts", label: "投资笔记" },
   { id: "deals", label: "参与项目" },
-  { id: "thoughts", label: "市场笔记" },
   { id: "reflections", label: "感悟" },
   { id: "education", label: "教育" },
   { id: "contact", label: "联系" },
@@ -769,7 +706,7 @@ export default function JimmyChenSite() {
 
   const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
   const openThoughtDetail = (thought) => setDetail({
-    kicker: "一级市场笔记",
+    kicker: "一级市场投资笔记",
     title: thought.title,
     date: thought.date,
     meta: [thought.category, thought.readTime].filter(Boolean),
@@ -814,53 +751,16 @@ export default function JimmyChenSite() {
           <div className="hero-visual rv"><SparseMatrix /></div>
         </header>
 
-        {/* Experience */}
-        <section className="section">
-          <SectionHead no="01" zh="投研经历" en="EXPERIENCE" id="experience" />
-          <div className="timeline">
-            {EXPERIENCES.map((e, i) => (
-              <article className="tl-item rv" key={i}>
-                <div className="tl-left">
-                  <span className="tl-period">{e.period}</span>
-                  <span className="tl-loc">{e.loc}</span>
-                </div>
-                <div className={"tl-body " + (e.current ? "tl-current" : "")}>
-                  <div className="tl-dot" />
-                  <h3 className="tl-org">{e.org}{e.orgEn && <span className="tl-org-en">{e.orgEn}</span>}</h3>
-                  <p className="tl-role">{e.role || "\u00a0"}</p>
-                  <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
-                  <div className="tags">{e.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Deals */}
-        <section className="section">
-          <SectionHead no="02" zh="参与投资的项目" en="DEAL EXPERIENCE" id="deals" />
-          <p className="sec-sub rv">参与研判与推动的真实项目（已脱敏）。详情内容待后续补充。</p>
-          <div className="deals">
-            {sortedDeals.map((d) => (
-              <article className="deal rv" key={d.id}>
-                <div className="deal-head">
-                  <div className="deal-title-block">
-                    <div className="deal-title-row">
-                      <h3 className="deal-name">{d.name}</h3>
-                      <StatusBadge status={d.status} />
-                    </div>
-                    <p className="deal-meta">{d.date} · {d.round} · {d.fund}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
         {/* Thoughts */}
         <section className="section">
-          <SectionHead no="03" zh="一级市场笔记" en="RESEARCH NOTES" id="thoughts" />
-          <p className="sec-sub rv">对产业趋势与投资逻辑的持续研究，观点独立，持续更新。</p>
+          <SectionHead no="01" zh="一级市场投资笔记" en="PRIMARY MARKET NOTES" id="thoughts" />
+          <div className="notes-intro rv">
+            <p>这些笔记是我一线投研工作的公开部分。方法是固定的：从技术架构本身出发，逐层往下追问「需求会不会变成订单、订单会不会变成利润」。不复述共识叙事，只写自己验证过的判断。</p>
+            <div className="notes-coverage">
+              <span className="notes-label">研究覆盖</span>
+              {["AI 推理芯片", "AI CPU", "CPU 架构", "半导体", "AI 视频生成"].map((tag) => <span className="tag" key={tag}>{tag}</span>)}
+            </div>
+          </div>
           <div className="thoughts">
             {sortedThoughts.map((t) => (
               <article className={"thought rv " + (t.highlight ? "thought-hl" : "")} key={t.id} onClick={() => openThoughtDetail(t)}>
@@ -876,9 +776,30 @@ export default function JimmyChenSite() {
           </div>
         </section>
 
+        {/* Deals */}
+        <section className="section">
+          <SectionHead no="02" zh="参与投资的项目" en="DEAL EXPERIENCE" id="deals" />
+          <p className="sec-sub rv">参与研判与推动的项目记录，项目名称与机构归属均已脱敏。详情内容待后续补充。</p>
+          <div className="deals">
+            {sortedDeals.map((d) => (
+              <article className="deal rv" key={d.id}>
+                <div className="deal-head">
+                  <div className="deal-title-block">
+                    <div className="deal-title-row">
+                      <h3 className="deal-name">{d.name}</h3>
+                      <StatusBadge status={d.status} />
+                    </div>
+                    <p className="deal-meta">{[d.date, d.round, d.fund].filter(Boolean).join(" · ")}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         {/* Reflections */}
         <section className="section">
-          <SectionHead no="04" zh="成长感悟" en="REFLECTIONS" id="reflections" />
+          <SectionHead no="03" zh="成长感悟" en="REFLECTIONS" id="reflections" />
           <div className="reflections">
             {sortedReflections.map((r) => (
               <article className="reflection rv" key={r.id}>
@@ -894,7 +815,7 @@ export default function JimmyChenSite() {
 
         {/* Education */}
         <section className="section">
-          <SectionHead no="05" zh="教育背景" en="EDUCATION" id="education" />
+          <SectionHead no="04" zh="教育背景" en="EDUCATION" id="education" />
           <div className="edu-grid">
             {EDUCATION.map((e, i) => (
               <article className="edu rv" key={i}>
@@ -905,7 +826,7 @@ export default function JimmyChenSite() {
                   </div>
                   <span className="edu-grade">{e.grade}</span>
                 </div>
-                <p className="edu-degree">{e.degree} · {e.period} · {e.loc}</p>
+                <p className="edu-degree">{[e.degree, e.loc].filter(Boolean).join(" · ")}</p>
                 <ul className="edu-notes">{e.notes.map((n, j) => <li key={j}>{n}</li>)}</ul>
               </article>
             ))}
@@ -1016,6 +937,10 @@ export default function JimmyChenSite() {
         .badge{font-size:11.5px;font-weight:500;padding:2px 10px;border-radius:2px;letter-spacing:.03em}
         .badge-invested{background:#E2EEE4;color:#1F5C33}.badge-eval{background:var(--blue-wash);color:var(--oxford)}.badge-memo{background:#F4EEDC;color:#7A5F1E}
 
+        .notes-intro{border-left:3px solid var(--oxford);padding:8px 0 8px 28px;margin:-6px 0 28px}
+        .notes-intro p{font-size:17px;line-height:2.05;color:#526071;margin-bottom:18px}
+        .notes-coverage{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .notes-label{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.12em}
         .thoughts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
         .thought{border:1px solid var(--line);border-radius:4px;background:#fff;padding:22px 24px;display:flex;flex-direction:column;transition:border-color .25s,transform .25s,box-shadow .25s;cursor:pointer}
         .thought:hover{border-color:var(--oxford);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,33,71,.07)}
