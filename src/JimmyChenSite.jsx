@@ -40,7 +40,7 @@ const EXPERIENCES = [
     period: "2026.05 — 至今",
     org: "普洛斯隐山资本",
     orgEn: "GLP Hidden Hill Capital",
-    role: "",
+    role: "投资分析实习生",
     loc: "上海",
     current: true,
     bullets: [
@@ -54,7 +54,7 @@ const EXPERIENCES = [
     period: "2026.01 — 2026.05",
     org: "光源资本",
     orgEn: "Lighthouse Capital",
-    role: "",
+    role: "分析师实习生",
     loc: "上海",
     current: false,
     bullets: [
@@ -68,7 +68,7 @@ const EXPERIENCES = [
     period: "2025.09 — 2025.12",
     org: "易石资本",
     orgEn: "Yishi Capital",
-    role: "",
+    role: "投资分析实习生",
     loc: "珠海",
     current: false,
     bullets: [
@@ -81,7 +81,7 @@ const EXPERIENCES = [
     period: "2023.06 — 2023.09",
     org: "联通数字科技有限公司",
     orgEn: "China Unicom Digital Tech",
-    role: "",
+    role: "模型开发工程师",
     loc: "北京",
     current: false,
     bullets: [
@@ -89,6 +89,49 @@ const EXPERIENCES = [
       "搭建基于 Rolling-Window 的滚动回测框架，结合 Walk-forward 验证实现模型性能自动化评估与迭代优化，整体准确率提升 15%。",
     ],
     tags: ["时间序列", "Python", "机器学习"],
+  },
+];
+
+
+// ── 项目经历 ─────────────────────────────────────────────────────
+const PROJECTS = [
+  {
+    title: "一级市场竞品情报 AI Agent 系统开发",
+    period: "2026年03月 — 至今",
+    meta: "",
+    loc: "",
+    bullets: [
+      "基于 Workbuddy 自主搭建 AI Agent，自动扫描同业 FA（深蓝资本、IO资本、高鹄资本等）在手项目动态并生成结构化摘要，将赛道信息获取效率提升数倍，辅助团队快速捕捉一级市场热度变化与潜在项目线索。",
+    ],
+  },
+  {
+    title: "基于 RAG 架构的纺织行业智能色彩管理系统",
+    period: "2026年03月 — 2026年05月",
+    meta: "",
+    loc: "",
+    bullets: [
+      "独立完成从业务 SOP 梳理到产品落地的全流程，系统基于 RAG 架构：以 2,600+ 色 PANTONE 色库构建 LAB 色彩空间向量化知识库，通过 CIEDE2000 色差算法实现智能检索与排色推荐，将人工耗时从数小时缩短至分钟级；通过 API 实时抓取头部品牌新品配色作为外部知识增强，自动生成潮流色彩趋势报告，已交付客户使用。",
+    ],
+  },
+  {
+    title: "面向异质残差目标的结构化草图化 GMRES（大规模稀疏矩阵加速求解）",
+    period: "2025年04月 — 2025年10月",
+    meta: "硕士毕业论文 | 成绩：Distinction | 导师：Prof. Yuji Nakatsukasa",
+    loc: "",
+    bullets: [
+      "针对大规模稀疏线性系统中「少数关键方程需极高精度、其余可容忍误差」的异质需求，提出 SS-GMRES 算法，结合随机降维与结构化草图压缩求解规模，同时保证关键行精度不损失，并给出严格的数学最优性证明。",
+      "在基准问题上实现 10–40 倍计算加速，关键行误差较标准方法降低 6–10 个数量级；全部实验用 MATLAB 独立实现，方法可应用于工程仿真、传感器网络及大规模优化等异质精度求解场景。",
+    ],
+  },
+  {
+    title: "基于核方法的蒙特卡洛在期权定价中的方差缩减",
+    period: "2023年09月 — 2024年02月",
+    meta: "本科毕业论文 | 成绩：A（专业第一） | 导师：Dr. Nicolas LANGRENÉ",
+    loc: "中国 珠海",
+    bullets: [
+      "方差缩减技术：应用核密度估计（KDE）优化蒙特卡洛模拟，使期权定价方差降低 20%。",
+      "希腊值估计：实现对 Delta/Gamma 等关键风险参数的稳定估计，提升了在低样本量下的定价精度。",
+    ],
   },
 ];
 
@@ -743,6 +786,7 @@ export default function JimmyChenSite() {
   const [resumePasswordError, setResumePasswordError] = useState("");
   const sortedDeals = sortByDateDesc(DEALS);
   const sortedExperiences = sortByDateDesc(EXPERIENCES);
+  const sortedProjects = sortByDateDesc(PROJECTS);
   const sortedThoughts = sortByDateDesc(THOUGHTS);
   const sortedReflections = sortByDateDesc(REFLECTIONS);
 
@@ -912,7 +956,7 @@ export default function JimmyChenSite() {
             <form className="resume-gate rv" onSubmit={submitResumePassword}>
               <div>
                 <h3 className="resume-gate-title">HR 访问</h3>
-                <p className="resume-gate-copy">工作履历与教育信息已折叠，请输入访问密码查看。</p>
+                <p className="resume-gate-copy">工作履历、项目经历与教育信息已折叠，请输入访问密码查看。</p>
               </div>
               <div className="resume-gate-row">
                 <input
@@ -947,6 +991,25 @@ export default function JimmyChenSite() {
                       <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
                       <div className="tags">{e.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</div>
                     </div>
+                  </article>
+                ))}
+              </div>
+
+              <h3 className="resume-subhead rv">项目经历</h3>
+              <div className="project-list">
+                {sortedProjects.map((p, i) => (
+                  <article className="project rv" key={i}>
+                    <div className="project-top">
+                      <div>
+                        <h3 className="project-title">{p.title}</h3>
+                        {p.meta && <p className="project-meta">{p.meta}</p>}
+                      </div>
+                      <div className="project-side">
+                        <span>{p.period}</span>
+                        {p.loc && <span>{p.loc}</span>}
+                      </div>
+                    </div>
+                    <ul className="project-bullets">{p.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
                   </article>
                 ))}
               </div>
@@ -1109,6 +1172,15 @@ export default function JimmyChenSite() {
         .resume-error{font-size:12.5px;color:var(--crit);line-height:1.7;margin-top:-8px}
         .resume-subhead{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--oxford);margin:0 0 22px}
         .resume-subhead:not(:first-child){margin-top:34px}
+        .project-list{display:grid;gap:16px}
+        .project{border:1px solid var(--line);border-radius:4px;background:#fff;padding:22px 24px}
+        .project-top{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;margin-bottom:12px}
+        .project-title{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink);line-height:1.55}
+        .project-meta{font-family:var(--mono);font-size:12px;color:var(--sub);line-height:1.8;margin-top:4px}
+        .project-side{font-family:var(--mono);font-size:12px;color:var(--faint);text-align:right;line-height:1.8;display:flex;flex-direction:column;white-space:nowrap}
+        .project-bullets{list-style:none}.project-bullets li{font-size:13.8px;color:var(--ink);line-height:1.9;margin-bottom:8px;padding-left:16px;position:relative}
+        .project-bullets li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;background:var(--oxford);opacity:.45}
+        .project-bullets li:last-child{margin-bottom:0}
 
         .modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(20,32,46,.44);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:32px}
         .modal-panel{position:relative;width:min(760px,100%);max-height:min(76vh,720px);overflow:auto;background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:54px 62px 58px}
@@ -1166,6 +1238,7 @@ export default function JimmyChenSite() {
           .thoughts,.reflections{grid-template-columns:1fr}
           .deal-head{padding:18px 18px}
           .resume-gate-row{grid-template-columns:1fr}.resume-submit{width:100%}
+          .project-top{grid-template-columns:1fr}.project-side{text-align:left}
           .modal-backdrop{padding:18px}.modal-panel{max-height:82vh;padding:48px 24px 34px}.modal-title{font-size:22px}.modal-close{top:14px;right:14px}
           .contact-card{padding:40px 24px}.br-desktop{display:none}.sec-en{display:none}
         }
