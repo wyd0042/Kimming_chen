@@ -29,9 +29,6 @@ const PROFILE = {
   location: "深圳 · 上海 · 牛津",
 };
 
-const NOTE_PASSWORD = "20260730";
-
-
 // ── 参与投资的项目 ───────────────────────────────────────────────
 // 详情内容补充前，仅展示项目卡片
 // status 支持三种样式："已投资"（绿色）/ "深度评估"（蓝色）/ "已输出备忘录"（黄色）
@@ -674,42 +671,11 @@ function DetailModal({ detail, onClose }) {
   );
 }
 
-function PasswordModal({ note, value, error, onChange, onSubmit, onClose }) {
-  if (!note) return null;
-
-  return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <form className="password-panel" onSubmit={onSubmit} onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" type="button" onClick={onClose} aria-label="关闭密码验证">×</button>
-        <div className="modal-kicker">一级市场投资笔记</div>
-        <h2 className="password-title">请输入访问密码</h2>
-        <p className="password-note">{note.title}</p>
-        <input
-          className="password-input"
-          type="password"
-          inputMode="numeric"
-          autoFocus
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="访问密码"
-          aria-label="访问密码"
-        />
-        {error && <p className="password-error">{error}</p>}
-        <button className="password-submit" type="submit">查看全文</button>
-      </form>
-    </div>
-  );
-}
-
 export default function JimmyChenSite() {
   const [active, setActive] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [detail, setDetail] = useState(null);
-  const [noteUnlocked, setNoteUnlocked] = useState(false);
-  const [pendingThought, setPendingThought] = useState(null);
-  const [notePassword, setNotePassword] = useState("");
-  const [notePasswordError, setNotePasswordError] = useState("");
   const sortedDeals = sortByDateDesc(DEALS);
   const sortedThoughts = sortByDateDesc(THOUGHTS);
   const sortedReflections = sortByDateDesc(REFLECTIONS);
@@ -737,13 +703,8 @@ export default function JimmyChenSite() {
   }, []);
 
   useEffect(() => {
-    if (!detail && !pendingThought) return undefined;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        setDetail(null);
-        closePasswordModal();
-      }
-    };
+    if (!detail) return undefined;
+    const onKeyDown = (e) => { if (e.key === "Escape") setDetail(null); };
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
@@ -751,41 +712,16 @@ export default function JimmyChenSite() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [detail, pendingThought]);
+  }, [detail]);
 
   const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
-  const showThoughtDetail = (thought) => setDetail({
+  const openThoughtDetail = (thought) => setDetail({
     kicker: "一级市场投资笔记",
     title: thought.title,
     date: thought.date,
     meta: [thought.category, thought.readTime].filter(Boolean),
     content: thought.content,
   });
-  const openThoughtDetail = (thought) => {
-    if (noteUnlocked) {
-      showThoughtDetail(thought);
-      return;
-    }
-    setPendingThought(thought);
-    setNotePassword("");
-    setNotePasswordError("");
-  };
-  const closePasswordModal = () => {
-    setPendingThought(null);
-    setNotePassword("");
-    setNotePasswordError("");
-  };
-  const submitNotePassword = (e) => {
-    e.preventDefault();
-    if (notePassword.trim() !== NOTE_PASSWORD) {
-      setNotePasswordError("密码不正确，请重新输入。");
-      return;
-    }
-    const thought = pendingThought;
-    setNoteUnlocked(true);
-    closePasswordModal();
-    if (thought) showThoughtDetail(thought);
-  };
   const openReflectionDetail = (reflection) => setDetail({
     kicker: "成长感悟",
     title: reflection.title,
@@ -938,14 +874,6 @@ export default function JimmyChenSite() {
         </footer>
       </main>
       <DetailModal detail={detail} onClose={() => setDetail(null)} />
-      <PasswordModal
-        note={pendingThought}
-        value={notePassword}
-        error={notePasswordError}
-        onChange={setNotePassword}
-        onSubmit={submitNotePassword}
-        onClose={closePasswordModal}
-      />
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -1072,14 +1000,6 @@ export default function JimmyChenSite() {
         .modal-remark h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--crit);margin-bottom:10px}
         .modal-remark p{font-size:14px;color:var(--sub);line-height:1.9;margin-bottom:8px}
         .modal-remark p:last-child{margin-bottom:0}
-        .password-panel{position:relative;width:min(430px,100%);background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:48px 44px 42px}
-        .password-title{font-family:var(--serif);font-size:24px;line-height:1.45;color:var(--oxford);margin-bottom:8px}
-        .password-note{font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:22px}
-        .password-input{width:100%;height:44px;border:1px solid var(--line);border-radius:3px;background:#fff;padding:0 14px;font-family:var(--mono);font-size:15px;color:var(--ink);outline:none}
-        .password-input:focus{border-color:var(--oxford);box-shadow:0 0 0 3px rgba(0,33,71,.08)}
-        .password-error{font-size:12.5px;color:var(--crit);line-height:1.7;margin-top:9px}
-        .password-submit{width:100%;height:44px;margin-top:18px;border:none;border-radius:3px;background:var(--oxford);color:#fff;font-weight:600;font-size:14px}
-        .password-submit:hover{background:#0B3565}
 
         .edu-grid{display:grid;gap:16px}
         .edu{border:1px solid var(--line);border-radius:4px;background:#fff;padding:24px 26px}
