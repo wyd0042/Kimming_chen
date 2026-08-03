@@ -29,6 +29,70 @@ const PROFILE = {
   location: "深圳 · 上海 · 牛津",
 };
 
+
+// ── 个人履历访问密码 ─────────────────────────────────────────────
+const RESUME_PASSWORD = "hr3688";
+
+
+// ── 工作履历 ─────────────────────────────────────────────────────
+const EXPERIENCES = [
+  {
+    period: "2026.05 — 至今",
+    org: "普洛斯隐山资本",
+    orgEn: "GLP Hidden Hill Capital",
+    role: "",
+    loc: "上海",
+    current: true,
+    bullets: [
+      "推动团队完成某新型存储介质芯片公司天使++轮投资（300 万美元）：系统拆解 GPU+HBM、SRAM 近存、MRAM 存算三条技术路线的架构原理与商业化差异，基于先进制程密度拐点识别投资机会，为投资决策提供底层判断。",
+      "对某 RISC-V 芯片公司、某 ARM 架构 AI 服务器 CPU 公司等重点标的，沿技术路线从架构、供应链到商业化路径逐层拆解，搭建可比公司分析框架，输出投资建议。",
+      "基于赛道研究主动挖掘初创标的，覆盖 AI 芯片、AI4S、核聚变等方向；通过牛津校友网络挖掘某核聚变初创项目，独立完成技术路线与商业化可行性评估，输出项目备忘录。",
+    ],
+    tags: ["新型存储", "AI 芯片", "核聚变", "天使++轮"],
+  },
+  {
+    period: "2026.01 — 2026.05",
+    org: "光源资本",
+    orgEn: "Lighthouse Capital",
+    role: "",
+    loc: "上海",
+    current: false,
+    bullets: [
+      "系统跟踪国内外 AI 推理芯片赛道，按技术路线（GPGPU / DSA / 可重构数据流 / 存算解耦）梳理 20+ 家厂商图谱，横向对比架构、存储方案、封装工艺与商业化进展。",
+      "针对某存算解耦架构推理芯片公司独立完成约 30 页研究报告：围绕 Prefill / Decoding 负载差异与显存墙瓶颈，构建「有效吞吐量–TCO」分析框架，形成技术竞争力与商业可行性的独立判断。",
+      "设计结构化尽调问题清单，主导 6 场管理层及产业链专家访谈的信息整理与风险提炼，交叉验证技术路线可行性，推动项目从初步接触进入深度评估阶段。",
+    ],
+    tags: ["AI 推理芯片", "存算解耦", "尽职调查"],
+  },
+  {
+    period: "2025.09 — 2025.12",
+    org: "易石资本",
+    orgEn: "Yishi Capital",
+    role: "",
+    loc: "珠海",
+    current: false,
+    bullets: [
+      "聚焦大模型赛道，系统对比并持续监测国内头部基座模型厂商（MiniMax / 智谱 / 阶跃星辰 / 月之暗面）在技术路径、产品化进度、商业化模式与融资估值上的差异，输出竞争格局报告。",
+      "独立 sourcing 上海垣信卫星（「千帆星座」低轨卫星互联网核心运营方，规划 1.5 万颗星组网，对标 SpaceX 星链），完成行业研究与项目判断后推动团队跟进，参与完成 A+ 轮投资 2000 万人民币。",
+    ],
+    tags: ["大模型", "商业航天", "A+ 轮"],
+  },
+  {
+    period: "2023.06 — 2023.09",
+    org: "联通数字科技有限公司",
+    orgEn: "China Unicom Digital Tech",
+    role: "",
+    loc: "北京",
+    current: false,
+    bullets: [
+      "基于 Python 对高频非平稳数据进行多尺度特征工程，结合 Prophet 与滚动窗口机制搭建混合预测模型，通过参数约束提升极端值下的稳健性。",
+      "搭建基于 Rolling-Window 的滚动回测框架，结合 Walk-forward 验证实现模型性能自动化评估与迭代优化，整体准确率提升 15%。",
+    ],
+    tags: ["时间序列", "Python", "机器学习"],
+  },
+];
+
+
 // ── 参与投资的项目 ───────────────────────────────────────────────
 // 详情内容补充前，仅展示项目卡片
 // status 支持三种样式："已投资"（绿色）/ "深度评估"（蓝色）/ "已输出备忘录"（黄色）
@@ -447,7 +511,6 @@ const EDUCATION = [
     schoolEn: "University of Oxford",
     degree: "数学建模与科学计算 硕士",
     period: "",
-    loc: "英国 牛津",
     grade: "Distinction（前 10%）",
     notes: [
       "核心课程：机器学习、最优化、偏微分方程数值解、数学建模、有限元方法、数值线性代数",
@@ -456,15 +519,14 @@ const EDUCATION = [
     ],
   },
   {
-    school: "北师香港浸会大学",
-    schoolEn: "BNU-HKBU United International College",
+    school: "香港浸会大学",
+    schoolEn: "Hong Kong Baptist University",
     degree: "金融数学 本科",
     period: "",
-    loc: "中国 珠海",
     grade: "3.80 / 4.0（专业第一）",
     notes: [
       "核心课程：随机过程、时间序列、C++、期权定价、金融风险管理、金融建模、回归分析",
-      "国家奖学金 · 最佳毕业论文 · 最佳毕业生 · 校级一等奖学金（连续四年）",
+      "Dean's List（院长荣誉名单） · 最佳毕业论文 · 最佳毕业生 · 校级一等奖学金（连续四年）",
       "iCAN 大学生创新创业大赛华南地区二等奖",
     ],
   },
@@ -487,7 +549,7 @@ const NAV = [
   { id: "thoughts", label: "投资笔记" },
   { id: "deals", label: "参与项目" },
   { id: "reflections", label: "感悟" },
-  { id: "education", label: "教育" },
+  { id: "resume", label: "履历" },
   { id: "contact", label: "联系" },
 ];
 
@@ -676,7 +738,11 @@ export default function JimmyChenSite() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [detail, setDetail] = useState(null);
+  const [resumeUnlocked, setResumeUnlocked] = useState(false);
+  const [resumePassword, setResumePassword] = useState("");
+  const [resumePasswordError, setResumePasswordError] = useState("");
   const sortedDeals = sortByDateDesc(DEALS);
+  const sortedExperiences = sortByDateDesc(EXPERIENCES);
   const sortedThoughts = sortByDateDesc(THOUGHTS);
   const sortedReflections = sortByDateDesc(REFLECTIONS);
 
@@ -700,7 +766,7 @@ export default function JimmyChenSite() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [resumeUnlocked]);
 
   useEffect(() => {
     if (!detail) return undefined;
@@ -715,6 +781,16 @@ export default function JimmyChenSite() {
   }, [detail]);
 
   const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
+  const submitResumePassword = (e) => {
+    e.preventDefault();
+    if (resumePassword.trim() !== RESUME_PASSWORD) {
+      setResumePasswordError("密码不正确，请重新输入。");
+      return;
+    }
+    setResumeUnlocked(true);
+    setResumePassword("");
+    setResumePasswordError("");
+  };
   const openThoughtDetail = (thought) => setDetail({
     kicker: "一级市场投资笔记",
     title: thought.title,
@@ -829,28 +905,74 @@ export default function JimmyChenSite() {
           </div>
         </section>
 
-        {/* Education */}
+        {/* Resume */}
         <section className="section">
-          <SectionHead no="04" zh="教育背景" en="EDUCATION" id="education" />
-          <div className="edu-grid">
-            {EDUCATION.map((e, i) => (
-              <article className="edu rv" key={i}>
-                <div className="edu-top">
-                  <div>
-                    <h3 className="edu-school">{e.school}</h3>
-                    <p className="edu-school-en">{e.schoolEn}</p>
-                  </div>
-                  <span className="edu-grade">{e.grade}</span>
-                </div>
-                <p className="edu-degree">{[e.degree, e.loc].filter(Boolean).join(" · ")}</p>
-                <ul className="edu-notes">{e.notes.map((n, j) => <li key={j}>{n}</li>)}</ul>
-              </article>
-            ))}
-          </div>
-          <div className="skills rv">
-            <span className="skills-label">技能</span>
-            {SKILLS.map((s) => <span className="tag" key={s}>{s}</span>)}
-          </div>
+          <SectionHead no="04" zh="个人履历" en="RESUME" id="resume" />
+          {!resumeUnlocked ? (
+            <form className="resume-gate rv" onSubmit={submitResumePassword}>
+              <div>
+                <h3 className="resume-gate-title">HR 访问</h3>
+                <p className="resume-gate-copy">工作履历与教育信息已折叠，请输入访问密码查看。</p>
+              </div>
+              <div className="resume-gate-row">
+                <input
+                  className="resume-input"
+                  type="password"
+                  value={resumePassword}
+                  onChange={(e) => {
+                    setResumePassword(e.target.value);
+                    setResumePasswordError("");
+                  }}
+                  placeholder="访问密码"
+                  aria-label="个人履历访问密码"
+                />
+                <button className="resume-submit" type="submit">查看履历</button>
+              </div>
+              {resumePasswordError && <p className="resume-error">{resumePasswordError}</p>}
+            </form>
+          ) : (
+            <div className="resume-content">
+              <h3 className="resume-subhead rv">工作履历</h3>
+              <div className="timeline">
+                {sortedExperiences.map((e, i) => (
+                  <article className="tl-item rv" key={i}>
+                    <div className="tl-left">
+                      <span className="tl-period">{e.period}</span>
+                      <span className="tl-loc">{e.loc}</span>
+                    </div>
+                    <div className={"tl-body " + (e.current ? "tl-current" : "")}>
+                      <div className="tl-dot" />
+                      <h3 className="tl-org">{e.org}{e.orgEn && <span className="tl-org-en">{e.orgEn}</span>}</h3>
+                      <p className="tl-role">{e.role || "\u00a0"}</p>
+                      <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
+                      <div className="tags">{e.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <h3 className="resume-subhead rv">教育背景</h3>
+              <div className="edu-grid">
+                {EDUCATION.map((e, i) => (
+                  <article className="edu rv" key={i}>
+                    <div className="edu-top">
+                      <div>
+                        <h3 className="edu-school">{e.school}</h3>
+                        <p className="edu-school-en">{e.schoolEn}</p>
+                      </div>
+                      <span className="edu-grade">{e.grade}</span>
+                    </div>
+                    <p className="edu-degree">{e.degree}</p>
+                    <ul className="edu-notes">{e.notes.map((n, j) => <li key={j}>{n}</li>)}</ul>
+                  </article>
+                ))}
+              </div>
+              <div className="skills rv">
+                <span className="skills-label">技能</span>
+                {SKILLS.map((s) => <span className="tag" key={s}>{s}</span>)}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Contact */}
@@ -976,6 +1098,18 @@ export default function JimmyChenSite() {
         .ref-date{font-family:var(--mono);font-size:11px;color:var(--faint);flex-shrink:0}
         .ref-more{font-family:var(--mono);font-size:11.5px;color:var(--oxford);background:none;border:none;text-align:left;padding:0}
 
+        .resume-gate{border:1px solid var(--line);border-radius:4px;background:#fff;padding:24px 26px;display:grid;gap:20px}
+        .resume-gate-title{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--oxford);margin-bottom:4px}
+        .resume-gate-copy{font-size:13.5px;color:var(--sub);line-height:1.8}
+        .resume-gate-row{display:grid;grid-template-columns:1fr auto;gap:10px}
+        .resume-input{min-width:0;height:42px;border:1px solid var(--line);border-radius:3px;background:#fff;padding:0 13px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none}
+        .resume-input:focus{border-color:var(--oxford);box-shadow:0 0 0 3px rgba(0,33,71,.08)}
+        .resume-submit{height:42px;border:none;border-radius:3px;background:var(--oxford);color:#fff;font-size:13.5px;font-weight:600;padding:0 18px}
+        .resume-submit:hover{background:#0B3565}
+        .resume-error{font-size:12.5px;color:var(--crit);line-height:1.7;margin-top:-8px}
+        .resume-subhead{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--oxford);margin:0 0 22px}
+        .resume-subhead:not(:first-child){margin-top:34px}
+
         .modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(20,32,46,.44);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:32px}
         .modal-panel{position:relative;width:min(760px,100%);max-height:min(76vh,720px);overflow:auto;background:#fff;color:var(--ink);border:1px solid rgba(0,33,71,.12);border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.22);padding:54px 62px 58px}
         .modal-close{position:absolute;top:20px;right:22px;width:34px;height:34px;border:1px solid #D8D1C0;border-radius:50%;background:#fff;color:#B9A978;font-size:25px;line-height:28px;display:flex;align-items:center;justify-content:center}
@@ -1031,6 +1165,7 @@ export default function JimmyChenSite() {
           .tl-item{grid-template-columns:1fr;gap:8px}.tl-left{text-align:left;display:flex;gap:12px;align-items:baseline;padding-left:26px}
           .thoughts,.reflections{grid-template-columns:1fr}
           .deal-head{padding:18px 18px}
+          .resume-gate-row{grid-template-columns:1fr}.resume-submit{width:100%}
           .modal-backdrop{padding:18px}.modal-panel{max-height:82vh;padding:48px 24px 34px}.modal-title{font-size:22px}.modal-close{top:14px;right:14px}
           .contact-card{padding:40px 24px}.br-desktop{display:none}.sec-en{display:none}
         }
