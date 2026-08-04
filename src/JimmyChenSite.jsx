@@ -31,62 +31,62 @@ const PROFILE = {
 
 
 // ── 个人履历访问密码 ─────────────────────────────────────────────
-const RESUME_PASSWORD = "hr3688";
+const RESUME_PASSWORD = "hr0730";
 
 
 // ── 工作履历 ─────────────────────────────────────────────────────
 const EXPERIENCES = [
   {
-    period: "2026.05 — 至今",
+    period: "2026年05月 - 至今",
     org: "普洛斯隐山资本",
     orgEn: "GLP Hidden Hill Capital",
     role: "投资分析实习生",
-    loc: "上海",
+    loc: "中国 上海",
     current: true,
     bullets: [
-      "推动团队完成某新型存储介质芯片公司天使++轮投资（300 万美元）：系统拆解 GPU+HBM、SRAM 近存、MRAM 存算三条技术路线的架构原理与商业化差异，基于先进制程密度拐点识别投资机会，为投资决策提供底层判断。",
-      "对某 RISC-V 芯片公司、某 ARM 架构 AI 服务器 CPU 公司等重点标的，沿技术路线从架构、供应链到商业化路径逐层拆解，搭建可比公司分析框架，输出投资建议。",
-      "基于赛道研究主动挖掘初创标的，覆盖 AI 芯片、AI4S、核聚变等方向；通过牛津校友网络挖掘某核聚变初创项目，独立完成技术路线与商业化可行性评估，输出项目备忘录。",
+      "推动团队完成某新型存储介质芯片公司天使++轮投资（300万美元）；系统拆解GPU+HBM、SRAM近存、MRAM存算三条技术路线的架构原理与商业化差异，基于先进制程密度拐点识别新型存储介质的投资机会，为团队投资决策提供底层判断。",
+      "对某RISC-V芯片公司、某ARM架构AI服务器CPU公司等重点标的，沿技术路线从架构、供应链到商业化路径逐层拆解，搭建可比公司分析框架，提炼关键假设与核心风险，输出投资建议。",
+      "独立sourcing某操作型世界模型公司并推进团队跟进；深度对比具身智能赛道两条数据范式（视频对齐 vs. 4D重建标注），从技术原理、数据可扩展性到工业场景适配性逐层拆解，输出技术路线对比报告，明确团队在该赛道的投资方向与优先标的。",
     ],
-    tags: ["新型存储", "AI 芯片", "核聚变", "天使++轮"],
+    tags: ["新型存储", "RISC-V", "具身智能", "世界模型"],
   },
   {
-    period: "2026.01 — 2026.05",
+    period: "2026年01月 - 2026年05月",
     org: "光源资本",
     orgEn: "Lighthouse Capital",
     role: "分析师实习生",
-    loc: "上海",
+    loc: "中国 上海",
     current: false,
     bullets: [
-      "系统跟踪国内外 AI 推理芯片赛道，按技术路线（GPGPU / DSA / 可重构数据流 / 存算解耦）梳理 20+ 家厂商图谱，横向对比架构、存储方案、封装工艺与商业化进展。",
-      "针对某存算解耦架构推理芯片公司独立完成约 30 页研究报告：围绕 Prefill / Decoding 负载差异与显存墙瓶颈，构建「有效吞吐量–TCO」分析框架，形成技术竞争力与商业可行性的独立判断。",
-      "设计结构化尽调问题清单，主导 6 场管理层及产业链专家访谈的信息整理与风险提炼，交叉验证技术路线可行性，推动项目从初步接触进入深度评估阶段。",
+      "系统跟踪国内外AI推理芯片赛道投融资与产品迭代，按技术路线（GPGPU / DSA / 可重构数据流 / 存算解耦）梳理 20+ 家厂商图谱，横向对比架构、存储方案、封装工艺与商业化进展，形成赛道观点与重点标的清单。",
+      "针对某存算解耦架构推理芯片公司独立完成约 30 页研究报告；围绕推理阶段 Prefill / Decoding 负载差异与显存墙瓶颈，构建「有效吞吐量–TCO」分析框架，量化各架构的差异，形成对标的技术竞争力与商业可行性的独立判断。",
+      "基于 Workbuddy 自主搭建 AI Agent，自动扫描同业 FA（深蓝资本、IO资本、高鹄资本等）在手项目动态并生成结构化摘要，将赛道信息获取效率提升数倍，辅助团队快速捕捉一级市场热度变化与潜在项目线索。",
     ],
-    tags: ["AI 推理芯片", "存算解耦", "尽职调查"],
+    tags: ["AI 推理芯片", "存算解耦", "AI Agent"],
   },
   {
-    period: "2025.09 — 2025.12",
+    period: "2025年09月 - 2025年12月",
     org: "易石资本",
     orgEn: "Yishi Capital",
     role: "投资分析实习生",
-    loc: "珠海",
+    loc: "中国 珠海",
     current: false,
     bullets: [
-      "聚焦大模型赛道，系统对比并持续监测国内头部基座模型厂商（MiniMax / 智谱 / 阶跃星辰 / 月之暗面）在技术路径、产品化进度、商业化模式与融资估值上的差异，输出竞争格局报告。",
-      "独立 sourcing 上海垣信卫星（「千帆星座」低轨卫星互联网核心运营方，规划 1.5 万颗星组网，对标 SpaceX 星链），完成行业研究与项目判断后推动团队跟进，参与完成 A+ 轮投资 2000 万人民币。",
+      "聚焦大模型赛道，系统对比并持续监测国内头部基座模型厂商（MiniMax / 智谱 / 阶跃星辰 / 月之暗面）在技术路径、产品化进度、商业化模式与融资估值上的差异，输出竞争格局报告，明确团队在该赛道的关注方向与优先标的。",
+      "基于赛道研究主动挖掘初创标的，覆盖 AI 芯片、AI4S、核聚变、低轨卫星等方向；通过牛津校友网络sourcing某核聚变初创公司，输出技术与商业化评估备忘录；独立sourcing上海垣信卫星，推动团队跟进并参与完成 A+轮投资2000万人民币。",
     ],
-    tags: ["大模型", "商业航天", "A+ 轮"],
+    tags: ["大模型", "AI4S", "核聚变", "低轨卫星"],
   },
   {
-    period: "2023.06 — 2023.09",
+    period: "2023年06月 - 2023年09月",
     org: "联通数字科技有限公司",
     orgEn: "China Unicom Digital Tech",
-    role: "模型开发工程师",
-    loc: "北京",
+    role: "模型开发工程师实习生",
+    loc: "中国 北京",
     current: false,
     bullets: [
-      "基于 Python 对高频非平稳数据进行多尺度特征工程，结合 Prophet 与滚动窗口机制搭建混合预测模型，通过参数约束提升极端值下的稳健性。",
-      "搭建基于 Rolling-Window 的滚动回测框架，结合 Walk-forward 验证实现模型性能自动化评估与迭代优化，整体准确率提升 15%。",
+      "基于Python对高频非平稳数据进行多尺度特征工程，提取时序滞后特征与滚动统计量，结合Prophet与滚动窗口机制搭建混合预测模型，引入外生变量分层建模，通过参数约束提升极端值下的稳健性。",
+      "搭建基于Rolling-Window的滚动回测框架，结合Walk-forward验证策略实现模型性能的自动化评估与迭代优化，整体准确率提升15%，并通过残差自相关分析定位系统性偏差来源，驱动特征选择与模型结构的针对性优化。",
     ],
     tags: ["时间序列", "Python", "机器学习"],
   },
@@ -96,27 +96,9 @@ const EXPERIENCES = [
 // ── 项目经历 ─────────────────────────────────────────────────────
 const PROJECTS = [
   {
-    title: "一级市场竞品情报 AI Agent 系统开发",
-    period: "2026年03月 — 至今",
-    meta: "",
-    loc: "",
-    bullets: [
-      "基于 Workbuddy 自主搭建 AI Agent，自动扫描同业 FA（深蓝资本、IO资本、高鹄资本等）在手项目动态并生成结构化摘要，将赛道信息获取效率提升数倍，辅助团队快速捕捉一级市场热度变化与潜在项目线索。",
-    ],
-  },
-  {
-    title: "基于 RAG 架构的纺织行业智能色彩管理系统",
-    period: "2026年03月 — 2026年05月",
-    meta: "",
-    loc: "",
-    bullets: [
-      "独立完成从业务 SOP 梳理到产品落地的全流程，系统基于 RAG 架构：以 2,600+ 色 PANTONE 色库构建 LAB 色彩空间向量化知识库，通过 CIEDE2000 色差算法实现智能检索与排色推荐，将人工耗时从数小时缩短至分钟级；通过 API 实时抓取头部品牌新品配色作为外部知识增强，自动生成潮流色彩趋势报告，已交付客户使用。",
-    ],
-  },
-  {
     title: "面向异质残差目标的结构化草图化 GMRES（大规模稀疏矩阵加速求解）",
-    period: "2025年04月 — 2025年10月",
-    meta: "硕士毕业论文 | 成绩：Distinction | 导师：Prof. Yuji Nakatsukasa",
+    period: "2025年04月 - 2025年10月",
+    meta: "硕士毕业论文｜成绩：Distinction｜导师：Prof. Yuji Nakatsukasa",
     loc: "",
     bullets: [
       "针对大规模稀疏线性系统中「少数关键方程需极高精度、其余可容忍误差」的异质需求，提出 SS-GMRES 算法，结合随机降维与结构化草图压缩求解规模，同时保证关键行精度不损失，并给出严格的数学最优性证明。",
@@ -124,13 +106,21 @@ const PROJECTS = [
     ],
   },
   {
-    title: "基于核方法的蒙特卡洛在期权定价中的方差缩减",
-    period: "2023年09月 — 2024年02月",
-    meta: "本科毕业论文 | 成绩：A（专业第一） | 导师：Dr. Nicolas LANGRENÉ",
-    loc: "中国 珠海",
+    title: "基于物理信息神经网络（PINNs）的微分方程数值求解（边界约束策略与金融PDE应用）",
+    period: "2025年01月 - 2026年04月",
+    meta: "",
+    loc: "",
     bullets: [
-      "方差缩减技术：应用核密度估计（KDE）优化蒙特卡洛模拟，使期权定价方差降低 20%。",
-      "希腊值估计：实现对 Delta/Gamma 等关键风险参数的稳定估计，提升了在低样本量下的定价精度。",
+      "基于热方程与Black-Scholes方程经对数变量替换后的数学等价性，将物理信息神经网络（PINNs）框架应用于欧式期权定价；推导并实现硬约束边界嵌入方法以严格满足期权边界条件，通过变量变换实验发现数学等价的PDE表述在PINNs求解中精度差异显著，为金融PDE的变量变换策略选择提供实证依据；全部实验用PyTorch独立实现。",
+    ],
+  },
+  {
+    title: "基于核方法的蒙特卡洛在期权定价中的方差缩减",
+    period: "2024年01月 - 2024年06月",
+    meta: "",
+    loc: "",
+    bullets: [
+      "应用核密度估计（KDE）对蒙特卡洛模拟终端分布进行非参数平滑，使欧式期权定价方差降低约20%；基于KDE的解析可微性直接求导获得Delta/Gamma等希腊值，解决标准蒙特卡洛希腊值估计不稳定问题，为组合风险管理提供可靠输入。",
     ],
   },
 ];
@@ -553,24 +543,22 @@ const EDUCATION = [
     school: "牛津大学",
     schoolEn: "University of Oxford",
     degree: "数学建模与科学计算 硕士",
-    period: "",
+    period: "2024年09月 - 2027年01月",
     grade: "Distinction（前 10%）",
     notes: [
       "核心课程：机器学习、最优化、偏微分方程数值解、数学建模、有限元方法、数值线性代数",
-      "牛剑创投俱乐部成员，参与牛津与剑桥早期创业项目交流，积累两校创业生态与校友网络",
-      "硕士论文：SS-GMRES —— 面向异质残差目标的结构化草图化 GMRES，实现 10–40 倍计算加速（Distinction，导师 Prof. Yuji Nakatsukasa）",
+      "校园经历：牛剑创投俱乐部成员，参与牛津与剑桥早期创业项目交流，积累两校创业生态资源与校友网络。",
     ],
   },
   {
     school: "香港浸会大学",
     schoolEn: "Hong Kong Baptist University",
     degree: "金融数学 本科",
-    period: "",
-    grade: "3.80 / 4.0（专业第一）",
+    period: "2020年09月 - 2024年06月",
+    grade: "3.80/4.0（专业第一）",
     notes: [
       "核心课程：随机过程、时间序列、C++、期权定价、金融风险管理、金融建模、回归分析",
-      "Dean's List（院长荣誉名单） · 最佳毕业论文 · 最佳毕业生 · 校级一等奖学金（连续四年）",
-      "iCAN 大学生创新创业大赛华南地区二等奖",
+      "荣誉：Dean's List（院长荣誉名单）、最佳毕业生（2024）、最佳毕业论文（2024）、校级一等奖学金（2020 - 2024）",
     ],
   },
   // ✏️ 添加更多教育经历：复制上面一段，改内容
@@ -579,10 +567,12 @@ const EDUCATION = [
 
 // ── 技能标签 ─────────────────────────────────────────────────────
 const SKILLS = [
-  "Python", "MATLAB", "LaTeX", "Bloomberg", "Wind",
-  "Claude / GPT / Gemini 投研工作流",
+  "Python", "Matlab", "Latex", "Bloomberg", "Wind",
+  "熟练运用Claude/ChatGPT/Gemini等大模型进行投研工作流搭建与效率优化",
   // ✏️ 直接在这里加减技能标签
 ];
+
+const LANGUAGES = ["普通话（母语）", "粤语（母语）", "英语（流利，IELTS 7.5）"];
 
 
 // ── 导航栏标签 ───────────────────────────────────────────────────
@@ -989,7 +979,6 @@ export default function JimmyChenSite() {
                       <h3 className="tl-org">{e.org}{e.orgEn && <span className="tl-org-en">{e.orgEn}</span>}</h3>
                       <p className="tl-role">{e.role || "\u00a0"}</p>
                       <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
-                      <div className="tags">{e.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</div>
                     </div>
                   </article>
                 ))}
@@ -1025,7 +1014,7 @@ export default function JimmyChenSite() {
                       </div>
                       <span className="edu-grade">{e.grade}</span>
                     </div>
-                    <p className="edu-degree">{e.degree}</p>
+                    <p className="edu-degree">{[e.degree, e.period].filter(Boolean).join(" · ")}</p>
                     <ul className="edu-notes">{e.notes.map((n, j) => <li key={j}>{n}</li>)}</ul>
                   </article>
                 ))}
@@ -1033,6 +1022,10 @@ export default function JimmyChenSite() {
               <div className="skills rv">
                 <span className="skills-label">技能</span>
                 {SKILLS.map((s) => <span className="tag" key={s}>{s}</span>)}
+              </div>
+              <div className="skills rv">
+                <span className="skills-label">语言</span>
+                {LANGUAGES.map((s) => <span className="tag" key={s}>{s}</span>)}
               </div>
             </div>
           )}
