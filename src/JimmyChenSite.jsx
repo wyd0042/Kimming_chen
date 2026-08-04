@@ -31,6 +31,8 @@ const PROFILE = {
 
 
 // ── 个人履历访问密码 ─────────────────────────────────────────────
+// 需要展示个人履历时改成 true；需要隐藏时改成 false。显示时仍需输入下面的密码。
+const SHOW_RESUME_SECTION = false;
 const RESUME_PASSWORD = "hr0730";
 
 
@@ -582,7 +584,7 @@ const NAV = [
   { id: "thoughts", label: "投资笔记" },
   { id: "deals", label: "参与项目" },
   { id: "reflections", label: "感悟" },
-  { id: "resume", label: "履历" },
+  ...(SHOW_RESUME_SECTION ? [{ id: "resume", label: "履历" }] : []),
   { id: "contact", label: "联系" },
 ];
 
@@ -939,97 +941,98 @@ export default function JimmyChenSite() {
           </div>
         </section>
 
-        {/* Resume */}
-        <section className="section">
-          <SectionHead no="04" zh="个人履历" en="RESUME" id="resume" />
-          {!resumeUnlocked ? (
-            <form className="resume-gate rv" onSubmit={submitResumePassword}>
-              <div>
-                <h3 className="resume-gate-title">HR 访问</h3>
-                <p className="resume-gate-copy">工作履历、项目经历与教育信息已折叠，请输入访问密码查看。</p>
-              </div>
-              <div className="resume-gate-row">
-                <input
-                  className="resume-input"
-                  type="password"
-                  value={resumePassword}
-                  onChange={(e) => {
-                    setResumePassword(e.target.value);
-                    setResumePasswordError("");
-                  }}
-                  placeholder="访问密码"
-                  aria-label="个人履历访问密码"
-                />
-                <button className="resume-submit" type="submit">查看履历</button>
-              </div>
-              {resumePasswordError && <p className="resume-error">{resumePasswordError}</p>}
-            </form>
-          ) : (
-            <div className="resume-content">
-              <h3 className="resume-subhead rv">工作履历</h3>
-              <div className="timeline">
-                {sortedExperiences.map((e, i) => (
-                  <article className="tl-item rv" key={i}>
-                    <div className="tl-left">
-                      <span className="tl-period">{e.period}</span>
-                      <span className="tl-loc">{e.loc}</span>
-                    </div>
-                    <div className={"tl-body " + (e.current ? "tl-current" : "")}>
-                      <div className="tl-dot" />
-                      <h3 className="tl-org">{e.org}{e.orgEn && <span className="tl-org-en">{e.orgEn}</span>}</h3>
-                      <p className="tl-role">{e.role || "\u00a0"}</p>
-                      <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
-                    </div>
-                  </article>
-                ))}
-              </div>
+        {SHOW_RESUME_SECTION && (
+          <section className="section">
+            <SectionHead no="04" zh="个人履历" en="RESUME" id="resume" />
+            {!resumeUnlocked ? (
+              <form className="resume-gate rv" onSubmit={submitResumePassword}>
+                <div>
+                  <h3 className="resume-gate-title">HR 访问</h3>
+                  <p className="resume-gate-copy">工作履历、项目经历与教育信息已折叠，请输入访问密码查看。</p>
+                </div>
+                <div className="resume-gate-row">
+                  <input
+                    className="resume-input"
+                    type="password"
+                    value={resumePassword}
+                    onChange={(e) => {
+                      setResumePassword(e.target.value);
+                      setResumePasswordError("");
+                    }}
+                    placeholder="访问密码"
+                    aria-label="个人履历访问密码"
+                  />
+                  <button className="resume-submit" type="submit">查看履历</button>
+                </div>
+                {resumePasswordError && <p className="resume-error">{resumePasswordError}</p>}
+              </form>
+            ) : (
+              <div className="resume-content">
+                <h3 className="resume-subhead rv">工作履历</h3>
+                <div className="timeline">
+                  {sortedExperiences.map((e, i) => (
+                    <article className="tl-item rv" key={i}>
+                      <div className="tl-left">
+                        <span className="tl-period">{e.period}</span>
+                        <span className="tl-loc">{e.loc}</span>
+                      </div>
+                      <div className={"tl-body " + (e.current ? "tl-current" : "")}>
+                        <div className="tl-dot" />
+                        <h3 className="tl-org">{e.org}{e.orgEn && <span className="tl-org-en">{e.orgEn}</span>}</h3>
+                        <p className="tl-role">{e.role || "\u00a0"}</p>
+                        <ul className="tl-bullets">{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
+                      </div>
+                    </article>
+                  ))}
+                </div>
 
-              <h3 className="resume-subhead rv">项目经历</h3>
-              <div className="project-list">
-                {sortedProjects.map((p, i) => (
-                  <article className="project rv" key={i}>
-                    <div className="project-top">
-                      <div>
-                        <h3 className="project-title">{p.title}</h3>
-                        {p.meta && <p className="project-meta">{p.meta}</p>}
+                <h3 className="resume-subhead rv">项目经历</h3>
+                <div className="project-list">
+                  {sortedProjects.map((p, i) => (
+                    <article className="project rv" key={i}>
+                      <div className="project-top">
+                        <div>
+                          <h3 className="project-title">{p.title}</h3>
+                          {p.meta && <p className="project-meta">{p.meta}</p>}
+                        </div>
+                        <div className="project-side">
+                          <span>{p.period}</span>
+                          {p.loc && <span>{p.loc}</span>}
+                        </div>
                       </div>
-                      <div className="project-side">
-                        <span>{p.period}</span>
-                        {p.loc && <span>{p.loc}</span>}
-                      </div>
-                    </div>
-                    <ul className="project-bullets">{p.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
-                  </article>
-                ))}
-              </div>
+                      <ul className="project-bullets">{p.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
+                    </article>
+                  ))}
+                </div>
 
-              <h3 className="resume-subhead rv">教育背景</h3>
-              <div className="edu-grid">
-                {EDUCATION.map((e, i) => (
-                  <article className="edu rv" key={i}>
-                    <div className="edu-top">
-                      <div>
-                        <h3 className="edu-school">{e.school}</h3>
-                        <p className="edu-school-en">{e.schoolEn}</p>
+                <h3 className="resume-subhead rv">教育背景</h3>
+                <div className="edu-grid">
+                  {EDUCATION.map((e, i) => (
+                    <article className="edu rv" key={i}>
+                      <div className="edu-top">
+                        <div>
+                          <h3 className="edu-school">{e.school}</h3>
+                          <p className="edu-school-en">{e.schoolEn}</p>
+                        </div>
+                        <span className="edu-grade">{e.grade}</span>
                       </div>
-                      <span className="edu-grade">{e.grade}</span>
-                    </div>
-                    <p className="edu-degree">{[e.degree, e.period].filter(Boolean).join(" · ")}</p>
-                    <ul className="edu-notes">{e.notes.map((n, j) => <li key={j}>{n}</li>)}</ul>
-                  </article>
-                ))}
+                      <p className="edu-degree">{[e.degree, e.period].filter(Boolean).join(" · ")}</p>
+                      <ul className="edu-notes">{e.notes.map((n, j) => <li key={j}>{n}</li>)}</ul>
+                    </article>
+                  ))}
+                </div>
+                <div className="skills rv">
+                  <span className="skills-label">技能</span>
+                  {SKILLS.map((s) => <span className="tag" key={s}>{s}</span>)}
+                </div>
+                <div className="skills rv">
+                  <span className="skills-label">语言</span>
+                  {LANGUAGES.map((s) => <span className="tag" key={s}>{s}</span>)}
+                </div>
               </div>
-              <div className="skills rv">
-                <span className="skills-label">技能</span>
-                {SKILLS.map((s) => <span className="tag" key={s}>{s}</span>)}
-              </div>
-              <div className="skills rv">
-                <span className="skills-label">语言</span>
-                {LANGUAGES.map((s) => <span className="tag" key={s}>{s}</span>)}
-              </div>
-            </div>
-          )}
-        </section>
+            )}
+          </section>
+        )}
 
         {/* Contact */}
         <section className="section contact-section" id="contact">
